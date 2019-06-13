@@ -17,9 +17,10 @@
 
 ****
 
-##1. 使用Silicon Labs公司的Simplicity Studio创建工程
+## 1. 使用Silicon Labs公司的Simplicity Studio创建工程  
+
 Silicon Labs公司的Simplicity Studio可以从[官网](https://www.silabs.com/products/development-tools/software/simplicity-studio)下载，建议安装到默认的路径(C盘预留20GB以上的空间)。由于需要下载Zigbee协议SDK, 需要购买[Zigbee开发套件](https://www.silabs.com/products/development-tools/wireless/mesh-networking)才能拥有下载权限。本项目基于EmberZnet SDK 6.5.5版本开发。此外，此项目中还是用到了Micrium OS操作系统，也需要从Simplicity Studio中下载安装。最后由于EmberZnet中支持Micrium OS的插件现在只支持使用IAR来编译，因此需要安装IAR。
-###1.1 创建工程
+### 1.1 创建工程
 主要步骤如下：  
 * "File"-->"New"-->"Project";
 * 选择"Silicon Labs AppBuilder Project", 然后点击"Next"继续;
@@ -29,7 +30,7 @@ Silicon Labs公司的Simplicity Studio可以从[官网](https://www.silabs.com/p
 * 输入工程名称, 然后点击"Next"继续;
 * 在"Boards"列表框, 选择"BRD4164A"， 然后"Part"框会自动更新成对应的芯片型号。在编译器中选择IAR，最后点击"Finish"完成。
 上述步骤完成后，Simplicity Studio会自动打开锁创建的工程对应的isc文件。
-###1.2 配置工程
+### 1.2 配置工程
 在打开的isc界面上有多个tab，每个tab都包含不同的配置项目。这里主要的配置包括：
 * "ZCL global" tab，配置其中的"Manufacture"，这里直接选择"Silicon Laboratories 0x1049";
 * "ZCL Clusters" tab, 首先配置endpoint，为了简便起见，只用一个endpoint。然后选中这个endpoint，将"ZCL device type"设置为"Zigbee Custom"-->"HA devices"-->"HA on/off switch"。接下来勾选上其他一些需要的cluster，例如level control， color control等。
@@ -40,9 +41,9 @@ Silicon Labs公司的Simplicity Studio可以从[官网](https://www.silabs.com/p
   * device table;
   * Network Creator和Network Creator Security，这两个plugin将用于创建Zigbee网络和控制设备加网;
   * 支持Micrium OS，由于需要支持WiFi模组以及集成阿里物联网平台的SDK，需要有OS的支持。这里涉及几个plugin的替换：
-    * 取消Simple Main，使能Micrium RTOS
-    * 取消Zigbee PRO Stack Library，使能Zigbee PRO MbedTls Library for TRNG
-    * 使能mbed TLS Common和mbed TLS TRNG Configuration
+        * 取消Simple Main，使能Micrium RTOS
+        * 取消Zigbee PRO Stack Library，使能Zigbee PRO MbedTls Library for TRNG
+        * 使能mbed TLS Common和mbed TLS TRNG Configuration
 * "HAL Configurat" tab，点击按钮"Hardware Configurator"，然后勾选上Virtual Serial Port
 * "Callbacks" tab，使能如下几个callback:
   * emberAfMainInitCallback 用于完成一些初始化的工作
@@ -62,13 +63,13 @@ Silicon Labs公司的Simplicity Studio可以从[官网](https://www.silabs.com/p
 
 ****
 
-##2. 移植阿里物联生活平台设备侧SDK
+## 2. 移植阿里物联生活平台设备侧SDK
 参考[阿里物联生活平台的开发指南](https://living.aliyun.com/doc#index.html)，首先下载最新版本的[SDK(V3.01)](https://github.com/aliyun/iotkit-embedded), 参考SDK的[用户手册](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/Linkkit_User_Manual)进行配置和移植。
-###2.1 下载SDK
+### 2.1 下载SDK
 ```
 https://github.com/aliyun/iotkit-embedded.git
 ```
-###2.2 配置SDK
+### 2.2 配置SDK
 以windows为例，运行config.bat脚本，会弹出如下配置窗口：
 
 ![iotsdk_config](./Documents/images/iotsdk_config.png)  
@@ -84,16 +85,16 @@ https://github.com/aliyun/iotkit-embedded.git
   - [x] "FEATURE AWSS SUPPORT DEV AP"
 - [x] "FEATURE DEV BIND ENABLED"  
 保存配置退出。  
-###2.3 根据配置提取SDK代码
+### 2.3 根据配置提取SDK代码
 配置完成后，用户的配置保存在make.settings文件中。运行extract.bat脚本，自动提取相应的SDK源码，放置在output/eng文件夹下面。将eng文件夹拷贝到前面创建的Zigbee工程中，将eng文件夹名称修改为iotkit-embeded-sdk。
-###2.4 编译Zigbee工程
+### 2.4 编译Zigbee工程
 编译Zigbee工程，会有一些编译错误。主要原因是提取的SDK的头文件路径没有包含到工程中。  
 选择工程，右键，"Properties"，将SDK各个部分的路径添加到Include中，如下图：
 
 ![IncludePath](./Documents/images/project_include.png)
 
 反复检查修改，直至编译通过。  
-###2.5 实现wrapper.c中的适配接口
+### 2.5 实现wrapper.c中的适配接口
 wrapper.c中有一些接口是需要根据各自平台的具体情况来实现。这里我们使用的是运行在EFR32(ARM Cortex-M4)上的Micrium OS, IP通信依赖WGM110模组来实现。  
 wrapper.c中的接口主要分成几类：
 * IP 通信相关接口，包括：
@@ -122,4 +123,4 @@ wrapper.c中的接口主要分成几类：
 
 ****
 
-##3 使用WGM110模组连接网络
+## 3 使用WGM110模组连接网络
