@@ -121,6 +121,25 @@ wrapper.c中的接口主要分成几类：
   
 其中OS相关的接口可以参考[Micrium OS的文档和手册](https://doc.micrium.com/pages/viewpage.action?pageId=10753180)来逐步实现。  
 
+### 2.6 参照阿里云物联网SDK的网关参考代码实现云对接的功能
+主要参考linkkit_example_gateway.c，将其修改为动态注册，以便支持一型一密。  
+设备名称采用Eui64+Endpoint的方式来格式化，例如Eui64为000D6F00056AE60A的设备，有两个endpoint，1和2，因此需要要云端添加两个子设备，子设备名称分别是000D6F00056AE60A_1和000D6F00056AE60A_2。这样做的好处是解析云端的命令时，可以直接根据云端的devid提取设备名称，进而知道要操作的Zigbee设备的Eui64和endpoint。
+
 ****
 
 ## 3 使用WGM110模组连接网络
+开发WGM110的驱动软件，主要参考[API手册](https://www.silabs.com/documents/login/reference-manuals/wgm110-api-rm.pdf)。需要注意的是，EFR32与WGM110是通过UART连接的，速率115200，因此报文收发速度有限。另外，发送比较大的包时，需要分割成128字节的片来发送，否则容易出错。
+WGM110驱动实现主要包括以下几个部分，详细的情况直接参考[代码](./wifi)
+* 串口初始化和读写
+* WiFi 消息接收任务
+* 所有WiFi相关的接口都用的是同步方式实现，即发送命令给WiFi模组后，同步等待回应直至超时
+* 分别实现TCP/UDP的数据接收队列
+
+## 4 Zigbee 部分的功能实现
+### 4.1 定义token用于保存数据
+新增头文件[Z3Aliyun_custom_tokens.h](./Z3Aliyun_custom_tokens.h)，主要保存两部分的数据:
+* 从云端获取的设备secret以及其他需要保存在本地的数据
+* 从device table中提取的部分有用的数据，主要是子设备node id， Eui64，endpoint，以及对应的device id  
+### 4.2 周期性轮询设备
+目前主要通过查询设备属性，通过判断是否能接收到响应消息来判断设备是否在线。如果在线，就向云端添加设备；否则删除云端子设备。
+
