@@ -113,9 +113,13 @@ void optionSecurityAllowTrustCenterRejoinUsingWellKnownKey(void);
 void optionSecurityAllowTrustCenterRejoinUsingWellKnownKeyTimeout(void);
 void optionSecuritySetKeyRequestPolicy(void);
 void printAllLibraryStatus(void);
+void printChildTable(void);
 void printEvents(void);
+void printInfo(void);
+void printNeighborTable(void);
 void printOffCommand(void);
 void printOnCommand(void);
+void printRouteTable(void);
 void printTimeCommand(void);
 void resetCommand(void);
 static void zclBasicGlsrCommand(void) {
@@ -1394,6 +1398,14 @@ static EmberCommandEntry emberCommandTablePrintCommands[] = {
   emberCommandEntryTerminator()
 };
 
+static EmberCommandEntry emberCommandTablePluginStackDiagnosticsCommands[] = {
+  emberCommandEntryActionWithDetails("child-table", printChildTable, "", "Prints out the entries in the stack's child table.", NULL),
+  emberCommandEntryActionWithDetails("info", printInfo, "", "Prints out general information about the state of the stack.", NULL),
+  emberCommandEntryActionWithDetails("neighbor-table", printNeighborTable, "", "Prints out the entries in the stack's neighbor table.", NULL),
+  emberCommandEntryActionWithDetails("route-table", printRouteTable, "", "Prints out the entries in the stack's route table.", NULL),
+  emberCommandEntryTerminator()
+};
+
 #if defined(EMBER_COMMAND_INTEPRETER_HAS_DESCRIPTION_FIELD)
 static const char * const emberCommandTablePluginNetworkCreatorSecurityOpenWithKeyCommandArguments[] = {
   "The EUI64 of the joining device.",
@@ -1686,6 +1698,7 @@ static EmberCommandEntry emberCommandTablePluginCommands[] = {
   emberCommandEntrySubMenu("idle-sleep", emberCommandTablePluginIdleSleepCommands, ""),
   emberCommandEntrySubMenu("network-creator", emberCommandTablePluginNetworkCreatorCommands, ""),
   emberCommandEntrySubMenu("network-creator-security", emberCommandTablePluginNetworkCreatorSecurityCommands, ""),
+  emberCommandEntrySubMenu("stack-diagnostics", emberCommandTablePluginStackDiagnosticsCommands, ""),
   emberCommandEntryTerminator()
 };
 

@@ -1295,6 +1295,36 @@
 
 /** @} */ // end group plugin-network-creator-security
 
+/** @addtogroup plugin-stack-diagnostics Plugin Commands: Stack Diagnostics
+ * @ingroup cli
+ * These commands give more information about the status of the status of the
+ * stack, such as routing tables, neighbor tables, and child tables.
+ * 
+ * @{
+ */
+
+/** @brief <b>plugin stack-diagnostics child-table </b>
+ *   - <i>Prints out the entries in the stack's child table.</i>
+ */
+#define EMBER_AF_DOXYGEN_CLI_COMMAND_PLUGIN_STACK_DIAGNOSTICS_PLUGIN_STACK_DIAGNOSTICS_CHILD_TABLE
+
+/** @brief <b>plugin stack-diagnostics info </b>
+ *   - <i>Prints out general information about the state of the stack.</i>
+ */
+#define EMBER_AF_DOXYGEN_CLI_COMMAND_PLUGIN_STACK_DIAGNOSTICS_PLUGIN_STACK_DIAGNOSTICS_INFO
+
+/** @brief <b>plugin stack-diagnostics neighbor-table </b>
+ *   - <i>Prints out the entries in the stack's neighbor table.</i>
+ */
+#define EMBER_AF_DOXYGEN_CLI_COMMAND_PLUGIN_STACK_DIAGNOSTICS_PLUGIN_STACK_DIAGNOSTICS_NEIGHBOR_TABLE
+
+/** @brief <b>plugin stack-diagnostics route-table </b>
+ *   - <i>Prints out the entries in the stack's route table.</i>
+ */
+#define EMBER_AF_DOXYGEN_CLI_COMMAND_PLUGIN_STACK_DIAGNOSTICS_PLUGIN_STACK_DIAGNOSTICS_ROUTE_TABLE
+
+/** @} */ // end group plugin-stack-diagnostics
+
 /** @addtogroup attribute Attribute Management
  * @ingroup cli
  * Commands related to reading and writing attributes locally on a device.
@@ -1999,6 +2029,16 @@
  */
 
 /** @} */ // end group plugin-network-creator-security
+
+/** @addtogroup plugin-stack-diagnostics Plugin Commands: Stack Diagnostics
+ * @ingroup cli
+ * These commands give more information about the status of the status of the
+ * stack, such as routing tables, neighbor tables, and child tables.
+ * 
+ * @{
+ */
+
+/** @} */ // end group plugin-stack-diagnostics
 
 
 /** @} END addtogroup */

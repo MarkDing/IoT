@@ -1374,6 +1374,7 @@
 <file><name>$PROJ_DIR$/../../../protocol\zigbee\app\framework\plugin-soc\packet-handoff\packet-handoff.c</name></file>
 <file><name>$PROJ_DIR$/../../../protocol\zigbee\app\framework\plugin\scan-dispatch\scan-dispatch.c</name></file>
 <file><name>$PROJ_DIR$/../../../platform\base\hal\plugin\serial\serial.c</name></file>
+<file><name>$PROJ_DIR$/../../../protocol\zigbee\app\framework\plugin\stack-diagnostics\stack-diagnostics.c</name></file>
 <file><name>$PROJ_DIR$/../../../util\plugin\plugin-common\stack-protection-iar\stack-protection.c</name></file>
 <file><name>$PROJ_DIR$/../../../platform\base\hal\plugin\serial\ember-printf-wrapper.c</name></file>
 

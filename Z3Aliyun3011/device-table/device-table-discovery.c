@@ -601,12 +601,10 @@ void emberAfTrustCenterJoinCallback(EmberNodeId newNodeId,
 
   switch (status) {
     case EMBER_STANDARD_SECURITY_UNSECURED_JOIN:
-      #if  0
       // Broadcast permit joining to new router as it joins.
       broadcastPermitJoin(254);
       emberAfCorePrintln("new device line %d", __LINE__);
       emberAfDeviceTableNewDeviceJoinHandler(newNodeId, newNodeEui64);
-      #endif /* #if 0 */
       break;
     case EMBER_DEVICE_LEFT:
       newDeviceLeftHandler(newNodeEui64);

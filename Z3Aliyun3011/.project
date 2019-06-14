@@ -939,6 +939,11 @@
 			<locationURI>STUDIO_SDK_LOC/platform/base/hal/plugin/serial/serial.c</locationURI>
 		</link>
 		<link>
+			<name>stack/stack-diagnostics/stack-diagnostics.c</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/protocol/zigbee/app/framework/plugin/stack-diagnostics/stack-diagnostics.c</locationURI>
+		</link>
+		<link>
 			<name>stack/stack-protection-iar/stack-protection.c</name>
 			<type>1</type>
 			<locationURI>STUDIO_SDK_LOC/util/plugin/plugin-common/stack-protection-iar/stack-protection.c</locationURI>
