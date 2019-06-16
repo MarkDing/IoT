@@ -477,7 +477,7 @@ OverrideMfgClusterServer:1049,fc00,exclude,Primary
 
 #  ZigBee PRO network configuration.  Each endpoint belongs to a single network
 #  configuration.  There can be one or more network configurations.
-ZigbeeProNetwork:*Primary,ZA_COORDINATOR,Z3
+ZigbeeProNetwork:*Primary,ZA_ROUTER,Z3
 
 #  A list of optional outgoing commands that are included in the configuration.
 OptionalOutgoingCommands:768,10,CLIENT_TO_SERVER,0
@@ -504,16 +504,16 @@ Platform:efr32~family[M]~series[1]~device_configuration[2]~performance[P]~radio[
 ExactArchitectureToolchain:com.silabs.ss.tool.ide.arm.toolchain.iar:8.30.1.114
 
 #  Enable callbacks.
-Callbacks:emberAfMainInitCallback,emberAfPluginMicriumRtosAppTask1InitCallback,emberAfPluginMicriumRtosAppTask1MainLoopCallback,emberAfHalButtonIsrCallback,emberAfPluginDeviceTableDeviceLeftCallback,emberAfPluginDeviceTableNewDeviceCallback,emberAfReadAttributesResponseCallback,
+Callbacks:emberAfMainInitCallback,emberAfPluginMicriumRtosAppTask1InitCallback,emberAfPluginMicriumRtosAppTask1MainLoopCallback,emberAfHalButtonIsrCallback,emberAfPluginDeviceTableDeviceLeftCallback,emberAfPluginDeviceTableNewDeviceCallback,emberAfReadAttributesResponseCallback,emberAfStackStatusCallback,
 
 #  Any customer-specific general purpose custom events.
-CustomEvents:formNetworkRetryEventControl,formNetworkRetryEventHandler
-
 CustomEvents:pollAttrEventControl,pollAttrEventHandler
 
 CustomEvents:clearWiFiEventControl,clearWiFiEventHandler
 
 CustomEvents:addSubDevEventControl,addSubDevEventHandler
+
+CustomEvents:commissionEventControl,commissionEventHandler
 
 #  If bindings are enabled then this is the maximum number of supported
 #  bindings.
@@ -690,6 +690,7 @@ NetworkKey2:ABCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 allowMissingHeader:false
 useHeaderInPlace:false
 efr32~family[M]~series[1]~device_configuration[2]~performance[P]~radio[433]~flash[1024K]~temp[G]~package[L]~pins[125]~!module+BRD4164A+iar=USE_HARDWARE_CONFIGURATOR,,,
+efr32~family[M]~series[1]~device_configuration[2]~performance[P]~radio[332]~flash[1024K]~temp[G]~package[L]~pins[125]~!module+BRD4162A+iar=USE_HARDWARE_CONFIGURATOR,,,
 }
 {setupId:bookkeeping
 }
@@ -705,7 +706,7 @@ appSerial=1
 {setupId:halOptions
 }
 {setupId:hwConfig
-lastArchitectureId=efr32~family[M]~series[1]~device_configuration[2]~performance[P]~radio[433]~flash[1024K]~temp[G]~package[L]~pins[125]~!module+BRD4164A+iar
+lastArchitectureId=efr32~family[M]~series[1]~device_configuration[2]~performance[P]~radio[332]~flash[1024K]~temp[G]~package[L]~pins[125]~!module+BRD4162A+iar
 featureLevel=1
 active=true
 lastHwConfFileUsed=PATH(STACK_RELATIVE):app/builder/Z3Aliyun3011/brd4164a_efr32mg12p433f1024gl125.hwconf
@@ -797,8 +798,7 @@ appPlugin:command-relay,false
 appPlugin:comms-hub-function,false
 appPlugin:comms-hub-function-sub-ghz,true
 
-appPlugin:concentrator,true
-
+appPlugin:concentrator,false
 appPlugin:configuration-server,false
 appPlugin:connection-manager,false
 appPlugin:counters,true
@@ -927,15 +927,15 @@ appPlugin:mpsi,false
 appPlugin:mpsi-ipc,false
 appPlugin:mpsi-storage,false
 appPlugin:multi-network-library,false
-appPlugin:network-creator,true
-
-appPlugin:network-creator-security,true
-
+appPlugin:network-creator,false
+appPlugin:network-creator-security,false
 appPlugin:network-find,false
 appPlugin:network-find-sub-ghz,false
-appPlugin:network-steering,false
+appPlugin:network-steering,true
+
 appPlugin:nvm3,false
 
+appPlugin(efr32~family[M]~series[1]~device_configuration[2]~performance[P]~radio[332]~flash[1024K]~temp[G]~package[L]~pins[125]~!module+BRD4162A+iar):nvm3,true
 appPlugin(efr32~family[M]~series[1]~device_configuration[2]~performance[P]~radio[433]~flash[1024K]~temp[G]~package[L]~pins[125]~!module+BRD4164A+iar):nvm3,true
 appPlugin:nvm3-extflash,false
 appPlugin:occupancy-pyd1698,false
@@ -1012,6 +1012,7 @@ appPlugin:sim-eeprom2-1to2-upgrade-stub,false
 appPlugin:sim-eeprom2-to-nvm3-upgrade,false
 appPlugin:sim-eeprom2-to-nvm3-upgrade-stub,false
 
+appPlugin(efr32~family[M]~series[1]~device_configuration[2]~performance[P]~radio[332]~flash[1024K]~temp[G]~package[L]~pins[125]~!module+BRD4162A+iar):sim-eeprom2-to-nvm3-upgrade-stub,true
 appPlugin(efr32~family[M]~series[1]~device_configuration[2]~performance[P]~radio[433]~flash[1024K]~temp[G]~package[L]~pins[125]~!module+BRD4164A+iar):sim-eeprom2-to-nvm3-upgrade-stub,true
 appPlugin:simple-clock,false
 appPlugin:simple-main,false
@@ -1023,7 +1024,8 @@ appPlugin:sleepy-message-queue,false
 appPlugin:slot-manager,false
 appPlugin:smart-energy-registration,true
 
-appPlugin:stack-diagnostics,false
+appPlugin:stack-diagnostics,true
+
 appPlugin:stack-protection-iar,true
 
 appPlugin:standalone-bootloader-client,false
@@ -1056,7 +1058,8 @@ appPlugin:tunneling-client,true
 appPlugin:tunneling-server,true
 
 appPlugin:update-ha-tc-link-key,false
-appPlugin:update-tc-link-key,false
+appPlugin:update-tc-link-key,true
+
 appPlugin:wstk-display,false
 appPlugin:xmodem-sender,false
 appPlugin:zigbee-event-logger-stub,false
@@ -1098,4 +1101,10 @@ AppPluginOption(efr32~family[M]~series[1]~device_configuration[2]~performance[P]
 AppPluginOption(efr32~family[M]~series[1]~device_configuration[2]~performance[P]~radio[433]~flash[1024K]~temp[G]~package[L]~pins[125]~!module+BRD4164A+iar):EMBER_BROADCAST_TABLE_SIZE,254
 
 AppPluginOption(efr32~family[M]~series[1]~device_configuration[2]~performance[P]~radio[433]~flash[1024K]~temp[G]~package[L]~pins[125]~!module+BRD4164A+iar):EMBER_APS_UNICAST_MESSAGE_COUNT,64
+
+AppPluginOption(efr32~family[M]~series[1]~device_configuration[2]~performance[P]~radio[433]~flash[1024K]~temp[G]~package[L]~pins[125]~!module+BRD4164A+iar):EMBER_MAX_END_DEVICE_CHILDREN,10
+
+AppPluginOption(efr32~family[M]~series[1]~device_configuration[2]~performance[P]~radio[433]~flash[1024K]~temp[G]~package[L]~pins[125]~!module+BRD4164A+iar):EMBER_END_DEVICE_POLL_TIMEOUT,Minutes-16384
+
+AppPluginOption(efr32~family[M]~series[1]~device_configuration[2]~performance[P]~radio[433]~flash[1024K]~temp[G]~package[L]~pins[125]~!module+BRD4164A+iar):EMBER_AF_PLUGIN_NETWORK_CREATOR_SECURITY_ALLOW_TC_REJOIN_WITH_WELL_KNOWN_KEY,true
 

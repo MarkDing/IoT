@@ -46,7 +46,6 @@
 #define EMBER_SUPPORTED_NETWORKS (1)
 #define EMBER_AF_NETWORK_INDEX_PRIMARY (0)
 #define EMBER_AF_DEFAULT_NETWORK_INDEX EMBER_AF_NETWORK_INDEX_PRIMARY
-#define EMBER_AF_HAS_COORDINATOR_NETWORK
 #define EMBER_AF_HAS_ROUTER_NETWORK
 #define EMBER_AF_HAS_RX_ON_WHEN_IDLE_NETWORK
 #define EMBER_AF_TX_POWER_MODE EMBER_TX_POWER_MODE_USE_TOKEN
@@ -58,6 +57,7 @@
 #define EMBER_CALLBACK_MAIN_INIT
 #define EMBER_CALLBACK_HAL_BUTTON_ISR
 #define EMBER_CALLBACK_READ_ATTRIBUTES_RESPONSE
+#define EMBER_CALLBACK_STACK_STATUS
 #define EMBER_CALLBACK_ENERGY_SCAN_RESULT
 #define EMBER_CALLBACK_SCAN_COMPLETE
 #define EMBER_CALLBACK_NETWORK_FOUND
@@ -67,12 +67,6 @@
 #define EMBER_CALLBACK_IDENTIFY_CLUSTER_IDENTIFY_CLUSTER_SERVER_ATTRIBUTE_CHANGED
 #define EMBER_CALLBACK_IDENTIFY_CLUSTER_IDENTIFY
 #define EMBER_CALLBACK_IDENTIFY_CLUSTER_IDENTIFY_QUERY
-#define EMBER_CALLBACK_INCOMING_ROUTE_ERROR_HANDLER
-#define EMBER_APPLICATION_HAS_INCOMING_ROUTE_ERROR_HANDLER
-#define EMBER_CALLBACK_EZSP_INCOMING_ROUTE_ERROR_HANDLER
-#define EZSP_APPLICATION_HAS_INCOMING_ROUTE_ERROR_HANDLER
-#define EMBER_CALLBACK_GET_SOURCE_ROUTE_OVERHEAD
-#define EMBER_CALLBACK_SET_SOURCE_ROUTE_OVERHEAD
 #define EMBER_CALLBACK_INCOMING_PACKET_HANDOFF
 #define EMBER_APPLICATION_HAS_INCOMING_PACKET_HANDOFF
 #define EMBER_CALLBACK_OUTGOING_PACKET_HANDOFF
@@ -131,22 +125,6 @@
 // Use this macro to check if Radio Coexistence Stub plugin is included
 #define EMBER_AF_PLUGIN_COEXISTENCE_STUB
 
-// Use this macro to check if Concentrator Support plugin is included
-#define EMBER_AF_PLUGIN_CONCENTRATOR
-#define EMBER_APPLICATION_HAS_SOURCE_ROUTING
-#define EZSP_APPLICATION_HAS_ROUTE_RECORD_HANDLER
-// User options for plugin Concentrator Support
-#define EMBER_AF_PLUGIN_CONCENTRATOR_CONCENTRATOR_TYPE HIGH_RAM_CONCENTRATOR
-#define EMBER_SOURCE_ROUTE_TABLE_SIZE 16
-#define EZSP_HOST_SOURCE_ROUTE_TABLE_SIZE 32
-#define EMBER_AF_PLUGIN_CONCENTRATOR_MIN_TIME_BETWEEN_BROADCASTS_SECONDS 10
-#define EMBER_AF_PLUGIN_CONCENTRATOR_MAX_TIME_BETWEEN_BROADCASTS_SECONDS 60
-#define EMBER_AF_PLUGIN_CONCENTRATOR_ROUTE_ERROR_THRESHOLD 3
-#define EMBER_AF_PLUGIN_CONCENTRATOR_DELIVERY_FAILURE_THRESHOLD 1
-#define EMBER_AF_PLUGIN_CONCENTRATOR_MAX_HOPS 0
-#define EMBER_AF_PLUGIN_CONCENTRATOR_NCP_SUPPORT
-#define EMBER_AF_PLUGIN_CONCENTRATOR_DEFAULT_ROUTER_BEHAVIOR FULL
-
 // Use this macro to check if Counters plugin is included
 #define EMBER_AF_PLUGIN_COUNTERS
 // User options for plugin Counters
@@ -194,20 +172,13 @@
 #define EMBER_AF_PLUGIN_MICRIUM_RTOS_APP_TASK1_STACK_SIZE 4096
 #define EMBER_AF_PLUGIN_MICRIUM_RTOS_APP_TASK1_PRIORITY 7
 
-// Use this macro to check if Network Creator plugin is included
-#define EMBER_AF_PLUGIN_NETWORK_CREATOR
-// User options for plugin Network Creator
-#define EMBER_AF_PLUGIN_NETWORK_CREATOR_SCAN_DURATION 4
-#define EMBER_AF_PLUGIN_NETWORK_CREATOR_CHANNEL_MASK 0x02108800
-#define EMBER_AF_PLUGIN_NETWORK_CREATOR_CHANNEL_BEACONS_THRESHOLD 20
-#define EMBER_AF_PLUGIN_NETWORK_CREATOR_RADIO_POWER 3
-
-// Use this macro to check if Network Creator Security plugin is included
-#define EMBER_AF_PLUGIN_NETWORK_CREATOR_SECURITY
-// User options for plugin Network Creator Security
-#define EMBER_AF_PLUGIN_NETWORK_CREATOR_SECURITY_NETWORK_OPEN_TIME_S 300
-#define EMBER_AF_PLUGIN_NETWORK_CREATOR_SECURITY_TRUST_CENTER_SUPPORT
-#define EMBER_AF_PLUGIN_NETWORK_CREATOR_SECURITY_ALLOW_HA_DEVICES_TO_STAY
+// Use this macro to check if Network Steering plugin is included
+#define EMBER_AF_PLUGIN_NETWORK_STEERING
+// User options for plugin Network Steering
+#define EMBER_AF_PLUGIN_NETWORK_STEERING_CHANNEL_MASK 0x0318C800
+#define EMBER_AF_PLUGIN_NETWORK_STEERING_RADIO_TX_POWER 3
+#define EMBER_AF_PLUGIN_NETWORK_STEERING_SCAN_DURATION 5
+#define EMBER_AF_PLUGIN_NETWORK_STEERING_COMMISSIONING_TIME_S 180
 
 // Use this macro to check if NVM3 Library plugin is included
 #define EMBER_AF_PLUGIN_NVM3
@@ -247,6 +218,9 @@
 // Use this macro to check if Simulated EEPROM version 2 to NVM3 Upgrade Stub plugin is included
 #define EMBER_AF_PLUGIN_SIM_EEPROM2_TO_NVM3_UPGRADE_STUB
 
+// Use this macro to check if Stack Diagnostics plugin is included
+#define EMBER_AF_PLUGIN_STACK_DIAGNOSTICS
+
 // Use this macro to check if Stack Protection for IAR plugin is included
 #define EMBER_AF_PLUGIN_STACK_PROTECTION_IAR
 
@@ -255,12 +229,17 @@
 // User options for plugin Standard Printf Support
 #define EMBER_AF_PLUGIN_STANDARD_PRINTF_SUPPORT_MAX_BUFFER_LENGTH 80
 
+// Use this macro to check if Update TC Link Key plugin is included
+#define EMBER_AF_PLUGIN_UPDATE_TC_LINK_KEY
+// User options for plugin Update TC Link Key
+#define EMBER_AF_PLUGIN_UPDATE_TC_LINK_KEY_MAX_ATTEMPTS 3
+
 // Use this macro to check if ZigBee PRO MbedTls Stack Library for TRNG plugin is included
 #define EMBER_AF_PLUGIN_ZIGBEE_PRO_MBEDTLS_TRNG_LIBRARY
 // User options for plugin ZigBee PRO MbedTls Stack Library for TRNG
-#define EMBER_MAX_END_DEVICE_CHILDREN 6
+#define EMBER_MAX_END_DEVICE_CHILDREN 10
 #define EMBER_PACKET_BUFFER_COUNT 75
-#define EMBER_END_DEVICE_POLL_TIMEOUT MINUTES_256
+#define EMBER_END_DEVICE_POLL_TIMEOUT MINUTES_16384
 #define EMBER_END_DEVICE_POLL_TIMEOUT_SHIFT 6
 #define EMBER_LINK_POWER_DELTA_INTERVAL 300
 #define EMBER_APS_UNICAST_MESSAGE_COUNT 64
@@ -288,11 +267,8 @@
 // API find-and-bind-target from Find and Bind Target plugin
 #define EMBER_AF_API_FIND_AND_BIND_TARGET "protocol/zigbee/app/framework/plugin/find-and-bind-target/find-and-bind-target.h"
 
-// API network-creator from Network Creator plugin
-#define EMBER_AF_API_NETWORK_CREATOR "protocol/zigbee/app/framework/plugin/network-creator/network-creator.h"
-
-// API network-creator-security from Network Creator Security plugin
-#define EMBER_AF_API_NETWORK_CREATOR_SECURITY "protocol/zigbee/app/framework/plugin/network-creator-security/network-creator-security.h"
+// API network-steering from Network Steering plugin
+#define EMBER_AF_API_NETWORK_STEERING "protocol/zigbee/app/framework/plugin/network-steering/network-steering.h"
 
 // API nvm3 from NVM3 Library plugin
 #define EMBER_AF_API_NVM3 "platform/base/hal/plugin/nvm3/nvm3-token.h"
@@ -305,6 +281,9 @@
 
 // API serial from Serial plugin
 #define EMBER_AF_API_SERIAL "platform/base/hal/plugin/serial/serial.h"
+
+// API update-tc-link-key from Update TC Link Key plugin
+#define EMBER_AF_API_UPDATE_TC_LINK_KEY "protocol/zigbee/app/framework/plugin/update-tc-link-key/update-tc-link-key.h"
 
 
 // Custom macros

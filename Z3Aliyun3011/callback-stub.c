@@ -6,6 +6,9 @@
 // will be used in the case where user defined implementations
 // of the callbacks have not been provided.
 #include "app/framework/include/af.h"
+#include EMBER_AF_API_NETWORK_STEERING
+
+
 
 /** @brief Add To Current App Tasks
  *
@@ -674,6 +677,18 @@ uint16_t emberAfGetShortPollIntervalMsCallback(void)
  *
  */
 uint16_t emberAfGetShortPollIntervalQsCallback(void)
+{
+  return 0;
+}
+
+/** @brief Get Source Route Overhead
+ *
+ * This function is called by the framework to determine the overhead required
+ * in the network frame for source routing to a particular destination.
+ *
+ * @param destination The node id of the destination  Ver.: always
+ */
+uint8_t emberAfGetSourceRouteOverheadCallback(EmberNodeId destination)
 {
   return 0;
 }
@@ -1743,16 +1758,6 @@ bool emberAfPerformingKeyEstablishmentCallback(void)
   return false;
 }
 
-/** @brief Broadcast Sent
- *
- * This function is called when a new MTORR broadcast has been successfully
- * sent by the concentrator plugin.
- *
- */
-void emberAfPluginConcentratorBroadcastSentCallback(void)
-{
-}
-
 /** @brief Rollover
  *
  * This function is called every time a counter exceeds its threshold.
@@ -1977,43 +1982,78 @@ void emberAfPluginMicriumRtosAppTask3MainLoopCallback(void *p_arg)
   }
 }
 
+
 /** @brief Complete
  *
- * This callback notifies the user that the network creation process has
- * completed successfully.
+ * This callback is fired when the Network Steering plugin is complete.
  *
- * @param network The network that the network creator plugin successfully
- * formed. Ver.: always
- * @param usedSecondaryChannels Whether or not the network creator wants to
- * form a network on the secondary channels Ver.: always
+ * @param status On success this will be set to EMBER_SUCCESS to indicate a
+ * network was joined successfully. On failure this will be the status code of
+ * the last join or scan attempt. Ver.: always
+ * @param totalBeacons The total number of 802.15.4 beacons that were heard,
+ * including beacons from different devices with the same PAN ID. Ver.: always
+ * @param joinAttempts The number of join attempts that were made to get onto
+ * an open Zigbee network. Ver.: always
+ * @param finalState The finishing state of the network steering process. From
+ * this, one is able to tell on which channel mask and with which key the
+ * process was complete. Ver.: always
  */
-void emberAfPluginNetworkCreatorCompleteCallback(const EmberNetworkParameters *network,
-                                                 bool usedSecondaryChannels)
+void emberAfPluginNetworkSteeringCompleteCallback(EmberStatus status,
+                                                  uint8_t totalBeacons,
+                                                  uint8_t joinAttempts,
+                                                  uint8_t finalState)
 {
+  emberAfCorePrintln("Network Steering Completed: %p (0x%X)",
+                     (status == EMBER_SUCCESS ? "Join Success" : "FAILED"),
+                     status);
+  emberAfCorePrintln("Finishing state: 0x%X", finalState);
+  emberAfCorePrintln("Beacons heard: %d\nJoin Attempts: %d", totalBeacons, joinAttempts);
 }
 
-/** @brief Get Pan Id
+/** @brief Get Distributed Key
  *
- * This callback is called when the Network Creator plugin needs the PAN ID for
- * the network it is about to create. By default, the callback will return a
- * random 16-bit value.
+ * This callback is fired when the Network Steering plugin needs to set the distributed
+ * key. The application set the distributed key from Zigbee Alliance thru this callback
+ * or the network steering will use the default test key.
  *
+ * @param pointer to the distributed key struct
+ * @return true if the key is loaded successfully, otherwise false.
+ * level. Ver.: always
  */
-EmberPanId emberAfPluginNetworkCreatorGetPanIdCallback(void)
+bool emberAfPluginNetworkSteeringGetDistributedKeyCallback(EmberKeyData * key)
 {
-  return emberGetPseudoRandomNumber();
+  return false;
+}
+
+/** @brief Get Node Type
+ *
+ * This callback allows the application to set the node type that the network
+ * steering process will use in joining a network.
+ *
+ * @param state The current ::EmberAfPluginNetworkSteeringJoiningState.
+ *
+ * @return An ::EmberNodeType value that the network steering process will
+ * try to join a network as.
+ */
+EmberNodeType emberAfPluginNetworkSteeringGetNodeTypeCallback(EmberAfPluginNetworkSteeringJoiningState state)
+{
+  return ((emAfCurrentZigbeeProNetwork->nodeType == EMBER_COORDINATOR)
+          ? EMBER_ROUTER
+          : emAfCurrentZigbeeProNetwork->nodeType);
 }
 
 /** @brief Get Power For Radio Channel
  *
- * This callback is called when the Network Creator plugin needs the radio power for
- * the network it is about to create. By default, the callback will use the radio
- * power specified in the relevant plugin option.
+ * This callback is fired when the Network Steering plugin needs to set the
+ * power level. The application has the ability to change the max power level
+ * used for this particular channel.
  *
+ * @param channel The channel that the plugin is inquiring about the power
+ * level. Ver.: always
  */
-int8_t emberAfPluginNetworkCreatorGetRadioPowerCallback(void)
+int8_t emberAfPluginNetworkSteeringGetPowerForRadioChannelCallback(uint8_t channel)
 {
-  return EMBER_AF_PLUGIN_NETWORK_CREATOR_RADIO_POWER;
+  return emberAfMaxPowerLevel();
 }
 
 /** @brief Post Attribute Change
@@ -2500,6 +2540,20 @@ void emberAfSetShortPollIntervalQsCallback(uint16_t shortPollIntervalQs)
 {
 }
 
+/** @brief Set Source Route Overhead
+ *
+ * This function is called by the framework when it has information about the
+ * source route overhead to a particular destination. The application may use
+ * this information to cache the source route overhead.
+ *
+ * @param destination The node id of the destination  Ver.: always
+ * @param overhead The overhead in bytes  Ver.: always
+ */
+void emberAfSetSourceRouteOverheadCallback(EmberNodeId destination,
+                                           uint8_t overhead)
+{
+}
+
 /** @brief Set Time
  *
  * This callback should be implemented, if the device has access to real time
@@ -2568,21 +2622,6 @@ void emberAfSetWakeTimeoutMsCallback(uint16_t wakeTimeoutMs)
  */
 void emberAfSetWakeTimeoutQsCallback(uint16_t wakeTimeoutQs)
 {
-}
-
-/** @brief Stack Status
- *
- * This function is called by the application framework from the stack status
- * handler.  This callbacks provides applications an opportunity to be notified
- * of changes to the stack status and take appropriate action.  The return code
- * from this callback is ignored by the framework.  The framework will always
- * process the stack status after the callback returns.
- *
- * @param status   Ver.: always
- */
-bool emberAfStackStatusCallback(EmberStatus status)
-{
-  return false;
 }
 
 /** @brief Start Move

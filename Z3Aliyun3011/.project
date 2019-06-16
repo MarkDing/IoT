@@ -229,26 +229,6 @@
 			<locationURI>STUDIO_SDK_LOC/platform/base/hal/plugin/antenna-stub/antenna-stub.c</locationURI>
 		</link>
 		<link>
-			<name>concentrator/concentrator-support-cli.c</name>
-			<type>1</type>
-			<locationURI>STUDIO_SDK_LOC/protocol/zigbee/app/framework/plugin/concentrator/concentrator-support-cli.c</locationURI>
-		</link>
-		<link>
-			<name>concentrator/concentrator-support.c</name>
-			<type>1</type>
-			<locationURI>STUDIO_SDK_LOC/protocol/zigbee/app/framework/plugin/concentrator/concentrator-support.c</locationURI>
-		</link>
-		<link>
-			<name>concentrator/source-route-common.c</name>
-			<type>1</type>
-			<locationURI>STUDIO_SDK_LOC/protocol/zigbee/app/framework/plugin/concentrator/source-route-common.c</locationURI>
-		</link>
-		<link>
-			<name>concentrator/source-route.c</name>
-			<type>1</type>
-			<locationURI>STUDIO_SDK_LOC/protocol/zigbee/app/framework/plugin/concentrator/source-route.c</locationURI>
-		</link>
-		<link>
 			<name>counters/counters-cli.c</name>
 			<type>1</type>
 			<locationURI>STUDIO_SDK_LOC/protocol/zigbee/app/framework/plugin/counters/counters-cli.c</locationURI>
@@ -814,24 +794,19 @@
 			<locationURI>STUDIO_SDK_LOC/platform/micrium_os/common/source/rtos/rtos_err_str.c</locationURI>
 		</link>
 		<link>
-			<name>network-creator/network-creator-cli.c</name>
+			<name>network-steering/network-steering-cli.c</name>
 			<type>1</type>
-			<locationURI>STUDIO_SDK_LOC/protocol/zigbee/app/framework/plugin/network-creator/network-creator-cli.c</locationURI>
+			<locationURI>STUDIO_SDK_LOC/protocol/zigbee/app/framework/plugin/network-steering/network-steering-cli.c</locationURI>
 		</link>
 		<link>
-			<name>network-creator/network-creator.c</name>
+			<name>network-steering/network-steering-soc.c</name>
 			<type>1</type>
-			<locationURI>STUDIO_SDK_LOC/protocol/zigbee/app/framework/plugin/network-creator/network-creator.c</locationURI>
+			<locationURI>STUDIO_SDK_LOC/protocol/zigbee/app/framework/plugin/network-steering/network-steering-soc.c</locationURI>
 		</link>
 		<link>
-			<name>network-creator-security/network-creator-security-cli.c</name>
+			<name>network-steering/network-steering.c</name>
 			<type>1</type>
-			<locationURI>STUDIO_SDK_LOC/protocol/zigbee/app/framework/plugin/network-creator-security/network-creator-security-cli.c</locationURI>
-		</link>
-		<link>
-			<name>network-creator-security/network-creator-security.c</name>
-			<type>1</type>
-			<locationURI>STUDIO_SDK_LOC/protocol/zigbee/app/framework/plugin/network-creator-security/network-creator-security.c</locationURI>
+			<locationURI>STUDIO_SDK_LOC/protocol/zigbee/app/framework/plugin/network-steering/network-steering.c</locationURI>
 		</link>
 		<link>
 			<name>nvm3/nvm3_lock.c</name>
@@ -857,6 +832,16 @@
 			<name>standard-printf-support/ember-printf-wrapper.c</name>
 			<type>1</type>
 			<locationURI>STUDIO_SDK_LOC/platform/base/hal/plugin/serial/ember-printf-wrapper.c</locationURI>
+		</link>
+		<link>
+			<name>update-tc-link-key/update-tc-link-key-cli.c</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/protocol/zigbee/app/framework/plugin/update-tc-link-key/update-tc-link-key-cli.c</locationURI>
+		</link>
+		<link>
+			<name>update-tc-link-key/update-tc-link-key.c</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/protocol/zigbee/app/framework/plugin/update-tc-link-key/update-tc-link-key.c</locationURI>
 		</link>
 		<link>
 			<name>adc/EFR32/adc-efr32.c</name>
@@ -937,6 +922,11 @@
 			<name>serial/EFR32/serial.c</name>
 			<type>1</type>
 			<locationURI>STUDIO_SDK_LOC/platform/base/hal/plugin/serial/serial.c</locationURI>
+		</link>
+		<link>
+			<name>stack/stack-diagnostics/stack-diagnostics.c</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/protocol/zigbee/app/framework/plugin/stack-diagnostics/stack-diagnostics.c</locationURI>
 		</link>
 		<link>
 			<name>stack/stack-protection-iar/stack-protection.c</name>

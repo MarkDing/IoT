@@ -42,10 +42,10 @@ typedef struct {
   uint8_t clusterOutStartPosition;
 
   //appended
-  uint8_t     online;
-  uint8_t     keepalive_failcnt;
-  uint8_t     keepalive_seq;
-  int         cloud_devid;
+  uint8_t           online;
+  uint8_t           keepalive_failcnt;
+  uint8_t           keepalive_seq;
+  int               cloud_devid;
 } EmberAfPluginDeviceTableEntry;
 
 #define EMBER_AF_PLUGIN_DEVICE_TABLE_DEVICE_TABLE_SIZE 250

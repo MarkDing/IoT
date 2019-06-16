@@ -964,52 +964,6 @@
 
 /** @} */ // end group plugin-address-table
 
-/** @addtogroup plugin-concentrator Plugin Commands: Concentrator
- * @ingroup cli
- * The Concentrator plugin contributes several CLI commands to the application
- * framework for controlling the sending of MTORRs.
- * 
- * @{
- */
-
-/** @brief <b>plugin concentrator agg </b>
- *   - <i>(Requires Concentrator Support to be enabled on this device.) Schedules a ZigBee PRO Many To One Route Request (MTORR) to be sent out at next opportunity, which will cause aggregation (many-to-one) routes to be created towards this concentrator.</i>
- */
-#define EMBER_AF_DOXYGEN_CLI_COMMAND_PLUGIN_CONCENTRATOR_PLUGIN_CONCENTRATOR_AGG
-
-/** @brief <b>plugin concentrator print-host-table </b>
- *   - <i>Print the host source route table.</i>
- */
-#define EMBER_AF_DOXYGEN_CLI_COMMAND_PLUGIN_CONCENTRATOR_PLUGIN_CONCENTRATOR_PRINT_HOST_TABLE
-
-/** @brief <b>plugin concentrator print-table </b>
- *   - <i>Print the SOC/NCP source route table.</i>
- */
-#define EMBER_AF_DOXYGEN_CLI_COMMAND_PLUGIN_CONCENTRATOR_PLUGIN_CONCENTRATOR_PRINT_TABLE
-
-/** @brief <b>plugin concentrator set-router-behavior [behavior:1] </b>
- *   - <i>This command allows the user to set the router behavior for this plugin. The argument values come from concentrator-support.h in the enum with members starting with EMBER_AF_PLUGIN_CONCENTRATOR_ROUTER_BEHAVIOR_.</i>
- *     - behavior - INT8U - The value of a EMBER_AF_PLUGIN_CONCENTRATOR_ROUTER_BEHAVIOR_ enum member.
- */
-#define EMBER_AF_DOXYGEN_CLI_COMMAND_PLUGIN_CONCENTRATOR_PLUGIN_CONCENTRATOR_SET_ROUTER_BEHAVIOR
-
-/** @brief <b>plugin concentrator start </b>
- *   - <i>Starts the periodic broadcast of MTORRs</i>
- */
-#define EMBER_AF_DOXYGEN_CLI_COMMAND_PLUGIN_CONCENTRATOR_PLUGIN_CONCENTRATOR_START
-
-/** @brief <b>plugin concentrator status </b>
- *   - <i>Prints current status and configured parameters of the concentrator</i>
- */
-#define EMBER_AF_DOXYGEN_CLI_COMMAND_PLUGIN_CONCENTRATOR_PLUGIN_CONCENTRATOR_STATUS
-
-/** @brief <b>plugin concentrator stop </b>
- *   - <i>Stops the periodic broadcast of MTORRs</i>
- */
-#define EMBER_AF_DOXYGEN_CLI_COMMAND_PLUGIN_CONCENTRATOR_PLUGIN_CONCENTRATOR_STOP
-
-/** @} */ // end group plugin-concentrator
-
 /** @addtogroup plugin-counters Plugin Commands: Counters
  * @ingroup cli
  * This plugin provides APIs and CLI commands for reading and manipulating
@@ -1202,98 +1156,99 @@
 
 /** @} */ // end group plugin-idle-sleep
 
-/** @addtogroup plugin-network-creator Plugin Commands: Network Creator
+/** @addtogroup plugin-network-steering Plugin Commands: Network Steering
  * @ingroup cli
- * Commands pertaining to network creation with the Network Creator plugin.
+ * The Network Steering plugin commands are currently being used for the Profile
+ * Interop event.
  * 
  * @{
  */
 
-/** @brief <b>plugin network-creator form [useCentralizedSecurity:1] [panId:2] [radioTxPower:1] [channel:1] </b>
- *   - <i>Form a network with specified parameters.</i>
- *     - useCentralizedSecurity - BOOLEAN - Whether or not to form a centralized network. If this value is false, the device will attempt to join a distributed network.
- *     - panId - INT16U - PanID of the network to be formed
- *     - radioTxPower - INT8S - Tx power of the network to be formed
- *     - channel - INT8U - channel of the network to be formed
+/** @brief <b>plugin network-steering mask add [whichMask:1] [channel:1] </b>
+ *   - <i>Adds a channel to either the primary or secondary channel mask of the network-steering plugin.</i>
+ *     - whichMask - INT8U - The channel mask to add a channel to.
+ *     - channel - INT8U - The channel to add to the mask.
  */
-#define EMBER_AF_DOXYGEN_CLI_COMMAND_PLUGIN_NETWORK_CREATOR_PLUGIN_NETWORK_CREATOR_FORM
+#define EMBER_AF_DOXYGEN_CLI_COMMAND_PLUGIN_NETWORK_STEERING_PLUGIN_NETWORK_STEERING_MASK_ADD
 
-/** @brief <b>plugin network-creator mask add [mask:1] [channel:4] </b>
- *   - <i>Add a channel to the channel mask of choice.</i>
- *     - mask - INT8U - The mask of choice to which to add the channel. Entering an argument of '1' will choose the primary channel mask. Any other argument will choose the secondary channel mask.
- *     - channel - INT32U - The channel to add to the channel mask.
+/** @brief <b>plugin network-steering mask set [whichMask:1] [mask:4] </b>
+ *   - <i>Set either the primary or secondary channel mask.</i>
+ *     - whichMask - INT8U - The channel mask to subtract the channel from.
+ *     - mask - INT32U - The value to set the channel mask to.
  */
-#define EMBER_AF_DOXYGEN_CLI_COMMAND_PLUGIN_NETWORK_CREATOR_PLUGIN_NETWORK_CREATOR_MASK_ADD
+#define EMBER_AF_DOXYGEN_CLI_COMMAND_PLUGIN_NETWORK_STEERING_PLUGIN_NETWORK_STEERING_MASK_SET
 
-/** @brief <b>plugin network-creator mask set [mask:1] [newChannelMask:4] </b>
- *   - <i>Set a channel mask.</i>
- *     - mask - INT8U - The mask of choice to set. Entering an argument of '1' will choose the primary channel mask. Any other argument will choose the secondary channel mask.
- *     - newChannelMask - INT32U - The bit mask to which to set the chosen channel mask.
+/** @brief <b>plugin network-steering mask subtract [whichMask:1] [channel:1] </b>
+ *   - <i>Subtracts a channel from either the primary or secondary channel mask of the network-steering plugin.</i>
+ *     - whichMask - INT8U - The channel mask to subtract the channel from.
+ *     - channel - INT8U - The channel to subtract the mask from.
  */
-#define EMBER_AF_DOXYGEN_CLI_COMMAND_PLUGIN_NETWORK_CREATOR_PLUGIN_NETWORK_CREATOR_MASK_SET
+#define EMBER_AF_DOXYGEN_CLI_COMMAND_PLUGIN_NETWORK_STEERING_PLUGIN_NETWORK_STEERING_MASK_SUBTRACT
 
-/** @brief <b>plugin network-creator mask subtract [mask:1] [channel:4] </b>
- *   - <i>Subtract a channel from the channel mask of choice.</i>
- *     - mask - INT8U - The mask of choice from which to subtract the channel. Entering an argument of '1' will choose the primary channel mask. Any other argument will choose the secondary channel mask.
- *     - channel - INT32U - The channel to subtract from the channel mask.
+/** @brief <b>plugin network-steering start [options:1] </b>
+ *   - <i>Starts the network steering process.</i>
+ *     - options - INT8U - A mask of options for indicating specific behavior within the network-steering process.
  */
-#define EMBER_AF_DOXYGEN_CLI_COMMAND_PLUGIN_NETWORK_CREATOR_PLUGIN_NETWORK_CREATOR_MASK_SUBTRACT
+#define EMBER_AF_DOXYGEN_CLI_COMMAND_PLUGIN_NETWORK_STEERING_PLUGIN_NETWORK_STEERING_START
 
-/** @brief <b>plugin network-creator start [useCentralizedSecurity:1] </b>
- *   - <i>Starts the network formation process.</i>
- *     - useCentralizedSecurity - BOOLEAN - Whether or not to form a centralized network. If this value is false, the device will attempt to join a distributed network.
+/** @brief <b>plugin network-steering status </b>
+ *   - <i>Displays the current status of the network steering process.</i>
  */
-#define EMBER_AF_DOXYGEN_CLI_COMMAND_PLUGIN_NETWORK_CREATOR_PLUGIN_NETWORK_CREATOR_START
+#define EMBER_AF_DOXYGEN_CLI_COMMAND_PLUGIN_NETWORK_STEERING_PLUGIN_NETWORK_STEERING_STATUS
 
-/** @brief <b>plugin network-creator status </b>
- *   - <i>Print the status of the network-creator plugin.</i>
+/** @brief <b>plugin network-steering stop </b>
+ *   - <i>Stops the network steering process.</i>
  */
-#define EMBER_AF_DOXYGEN_CLI_COMMAND_PLUGIN_NETWORK_CREATOR_PLUGIN_NETWORK_CREATOR_STATUS
+#define EMBER_AF_DOXYGEN_CLI_COMMAND_PLUGIN_NETWORK_STEERING_PLUGIN_NETWORK_STEERING_STOP
 
-/** @brief <b>plugin network-creator stop </b>
- *   - <i>Stops the network formation process.</i>
- */
-#define EMBER_AF_DOXYGEN_CLI_COMMAND_PLUGIN_NETWORK_CREATOR_PLUGIN_NETWORK_CREATOR_STOP
+/** @} */ // end group plugin-network-steering
 
-/** @} */ // end group plugin-network-creator
-
-/** @addtogroup plugin-network-creator-security Plugin Commands: Network Creator Security
+/** @addtogroup plugin-stack-diagnostics Plugin Commands: Stack Diagnostics
  * @ingroup cli
- * Commands pertaining to network creation with the Network Creator plugin.
+ * These commands give more information about the status of the status of the
+ * stack, such as routing tables, neighbor tables, and child tables.
  * 
  * @{
  */
 
-/** @brief <b>plugin network-creator-security clear-joining-link-keys </b>
- *   - <i>Clear all of the joining link keys stored in the stack.</i>
+/** @brief <b>plugin stack-diagnostics child-table </b>
+ *   - <i>Prints out the entries in the stack's child table.</i>
  */
-#define EMBER_AF_DOXYGEN_CLI_COMMAND_PLUGIN_NETWORK_CREATOR_SECURITY_PLUGIN_NETWORK_CREATOR_SECURITY_CLEAR_JOINING_LINK_KEYS
+#define EMBER_AF_DOXYGEN_CLI_COMMAND_PLUGIN_STACK_DIAGNOSTICS_PLUGIN_STACK_DIAGNOSTICS_CHILD_TABLE
 
-/** @brief <b>plugin network-creator-security close-network </b>
- *   - <i>Close the network for joining.</i>
+/** @brief <b>plugin stack-diagnostics info </b>
+ *   - <i>Prints out general information about the state of the stack.</i>
  */
-#define EMBER_AF_DOXYGEN_CLI_COMMAND_PLUGIN_NETWORK_CREATOR_SECURITY_PLUGIN_NETWORK_CREATOR_SECURITY_CLOSE_NETWORK
+#define EMBER_AF_DOXYGEN_CLI_COMMAND_PLUGIN_STACK_DIAGNOSTICS_PLUGIN_STACK_DIAGNOSTICS_INFO
 
-/** @brief <b>plugin network-creator-security open-network </b>
- *   - <i>Open the network for joining.</i>
+/** @brief <b>plugin stack-diagnostics neighbor-table </b>
+ *   - <i>Prints out the entries in the stack's neighbor table.</i>
  */
-#define EMBER_AF_DOXYGEN_CLI_COMMAND_PLUGIN_NETWORK_CREATOR_SECURITY_PLUGIN_NETWORK_CREATOR_SECURITY_OPEN_NETWORK
+#define EMBER_AF_DOXYGEN_CLI_COMMAND_PLUGIN_STACK_DIAGNOSTICS_PLUGIN_STACK_DIAGNOSTICS_NEIGHBOR_TABLE
 
-/** @brief <b>plugin network-creator-security open-with-key [eui64:8] [joiningLinkKey:-1] </b>
- *   - <i>Open the network that would only allow the node with specified EUI and link key pair to join.</i>
- *     - eui64 - IEEE_ADDRESS - The EUI64 of the joining device.
- *     - joiningLinkKey - OCTET_STRING - The link key that the joining device will use to enter the network.
+/** @brief <b>plugin stack-diagnostics route-table </b>
+ *   - <i>Prints out the entries in the stack's route table.</i>
  */
-#define EMBER_AF_DOXYGEN_CLI_COMMAND_PLUGIN_NETWORK_CREATOR_SECURITY_PLUGIN_NETWORK_CREATOR_SECURITY_OPEN_WITH_KEY
+#define EMBER_AF_DOXYGEN_CLI_COMMAND_PLUGIN_STACK_DIAGNOSTICS_PLUGIN_STACK_DIAGNOSTICS_ROUTE_TABLE
 
-/** @brief <b>plugin network-creator-security set-joining-link-key [eui64:8] [joiningLinkKey:-1] </b>
- *   - <i>Set the link key that a specific joining device will use when joining the network. This command can be also used to add install code derived link keys. If all FF's are entered for the EUI64 for the joining device, then this link key will be used for all joining devices without a joining key entry.</i>
- *     - eui64 - IEEE_ADDRESS - The EUI64 of the joining device.
- *     - joiningLinkKey - OCTET_STRING - The link key that the joining device will use to enter the network.
+/** @} */ // end group plugin-stack-diagnostics
+
+/** @addtogroup plugin-update-tc-link-key Plugin Commands: Update TC Link Key
+ * @ingroup cli
+ * The update trust center link key commands are used to manipulate the behavior
+ * of the joining device to attempt the trust center link key updates in a
+ * certain fashion.
+ * 
+ * @{
  */
-#define EMBER_AF_DOXYGEN_CLI_COMMAND_PLUGIN_NETWORK_CREATOR_SECURITY_PLUGIN_NETWORK_CREATOR_SECURITY_SET_JOINING_LINK_KEY
 
-/** @} */ // end group plugin-network-creator-security
+/** @brief <b>plugin update-tc-link-key timer [timeInMilliseconds:4] </b>
+ *   - <i>This sets the the amount of time between subsequent trust center link key updates in milliseconds.</i>
+ *     - timeInMilliseconds - INT32U - The amount of time between subsequent trust center link key updates in milliseconds
+ */
+#define EMBER_AF_DOXYGEN_CLI_COMMAND_PLUGIN_UPDATE_TC_LINK_KEY_PLUGIN_UPDATE_TC_LINK_KEY_TIMER
+
+/** @} */ // end group plugin-update-tc-link-key
 
 /** @addtogroup attribute Attribute Management
  * @ingroup cli
@@ -1920,16 +1875,6 @@
 
 /** @} */ // end group plugin-address-table
 
-/** @addtogroup plugin-concentrator Plugin Commands: Concentrator
- * @ingroup cli
- * The Concentrator plugin contributes several CLI commands to the application
- * framework for controlling the sending of MTORRs.
- * 
- * @{
- */
-
-/** @} */ // end group plugin-concentrator
-
 /** @addtogroup plugin-counters Plugin Commands: Counters
  * @ingroup cli
  * This plugin provides APIs and CLI commands for reading and manipulating
@@ -1982,23 +1927,36 @@
 
 /** @} */ // end group plugin-idle-sleep
 
-/** @addtogroup plugin-network-creator Plugin Commands: Network Creator
+/** @addtogroup plugin-network-steering Plugin Commands: Network Steering
  * @ingroup cli
- * Commands pertaining to network creation with the Network Creator plugin.
+ * The Network Steering plugin commands are currently being used for the Profile
+ * Interop event.
  * 
  * @{
  */
 
-/** @} */ // end group plugin-network-creator
+/** @} */ // end group plugin-network-steering
 
-/** @addtogroup plugin-network-creator-security Plugin Commands: Network Creator Security
+/** @addtogroup plugin-stack-diagnostics Plugin Commands: Stack Diagnostics
  * @ingroup cli
- * Commands pertaining to network creation with the Network Creator plugin.
+ * These commands give more information about the status of the status of the
+ * stack, such as routing tables, neighbor tables, and child tables.
  * 
  * @{
  */
 
-/** @} */ // end group plugin-network-creator-security
+/** @} */ // end group plugin-stack-diagnostics
+
+/** @addtogroup plugin-update-tc-link-key Plugin Commands: Update TC Link Key
+ * @ingroup cli
+ * The update trust center link key commands are used to manipulate the behavior
+ * of the joining device to attempt the trust center link key updates in a
+ * certain fashion.
+ * 
+ * @{
+ */
+
+/** @} */ // end group plugin-update-tc-link-key
 
 
 /** @} END addtogroup */

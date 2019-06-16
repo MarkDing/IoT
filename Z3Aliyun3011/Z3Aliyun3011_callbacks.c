@@ -10,34 +10,77 @@
 #include "app/framework/include/af.h"
 #include "app/framework/plugin/network-creator/network-creator.h"
 #include "device-table/device-table.h"
+#include "../../../platform/emdrv/nvm3/inc/nvm3.h"
+#include "../../../platform/emdrv/nvm3/inc/nvm3_default.h"
 
 #include "wifi/wgm110.h"
 #include "iotkit-embedded-sdk/aliyun_main.h"
 #include "iotkit-embedded-sdk/wrappers/wrappers_defs.h"
 
 extern int HAL_Timer_Task_Init();
+extern uint8_t *emAfZclBuffer;
+extern uint16_t emAfZclBufferLen;
+extern uint16_t *emAfResponseLengthPtr;
+extern EmberApsFrame *emAfCommandApsFrame;
 
-#define POLL_ATTR_INTERVAL 5000
+#define POLL_ATTR_INTERVAL 10000
 #define FRESH_DEV_INTERVAL 5000
 
-    
+static uint8_t    g_app_task_can_run = 0;
+static uint8_t    g_button1_pressed = 0;
+
 EmberEventControl pollAttrEventControl;
 EmberEventControl clearWiFiEventControl;
 EmberEventControl addSubDevEventControl;
-EmberEventControl formNetworkRetryEventControl;
+EmberEventControl commissionEventControl;
 
-static uint8_t  g_keepalive_seq = 0;
-static uint8_t  g_keepalive_once = 4;
-static uint8_t  g_app_task_can_run = 0;
+typedef struct
+{
+    uint16_t    clusterID;
+    uint16_t    attrID;
+}PollItem_S;
+
+static const PollItem_S g_polllist[] = 
+{
+    {ZCL_ON_OFF_CLUSTER_ID,             ZCL_ON_OFF_ATTRIBUTE_ID},
+    {ZCL_LEVEL_CONTROL_CLUSTER_ID,      ZCL_CURRENT_LEVEL_ATTRIBUTE_ID},
+    {ZCL_COLOR_CONTROL_CLUSTER_ID,      ZCL_COLOR_CONTROL_COLOR_TEMPERATURE_ATTRIBUTE_ID},
+};
+static uint8_t  g_current_poll_index = 0;
 
 void emberAfPollAttrByDeviceTable()
 {
+    EmberStatus status;
     uint8_t attributeIdBuffer[2];
     EmberAfPluginDeviceTableEntry *deviceTable = emberAfDeviceTablePointer();
     uint8_t  i;
-    uint8_t  msg_sent = 0;
-    uint16_t total_entries = 0;
     
+    attributeIdBuffer[0] = LOW_BYTE(g_polllist[g_current_poll_index].attrID);
+    attributeIdBuffer[1] = HIGH_BYTE(g_polllist[g_current_poll_index].attrID);
+    emberAfFillCommandGlobalClientToServerReadAttributes(g_polllist[g_current_poll_index].clusterID, attributeIdBuffer, sizeof(attributeIdBuffer));
+
+    emAfCommandApsFrame->profileId = HA_PROFILE_ID;
+    emAfCommandApsFrame->sourceEndpoint = 1;
+    emAfCommandApsFrame->destinationEndpoint = 255;
+
+
+    EmberMessageBuffer payload = emberFillLinkedBuffers(emAfZclBuffer, *emAfResponseLengthPtr);
+    if (payload == EMBER_NULL_MESSAGE_BUFFER) {
+        emberAfCorePrintln("[%d] no enough buffer", __LINE__);
+        return;
+    }
+    
+    status = emberSendBroadcast(EMBER_RX_ON_WHEN_IDLE_BROADCAST_ADDRESS,
+                                emAfCommandApsFrame,
+                                1,
+                                payload);
+    emberAfCorePrintln("[%d] broadcast read cluster[%X] attr[%X] status=%X", __LINE__, 
+                                                                             g_polllist[g_current_poll_index].clusterID,
+                                                                             g_polllist[g_current_poll_index].attrID,
+                                                                             status);
+
+    g_current_poll_index = (g_current_poll_index + 1) % (sizeof(g_polllist) / sizeof(PollItem_S));
+
     for (i = 0; i < EMBER_AF_PLUGIN_DEVICE_TABLE_DEVICE_TABLE_SIZE; i++) {
         if (EMBER_AF_PLUGIN_DEVICE_TABLE_NULL_NODE_ID == deviceTable[i].nodeId ||
             EMBER_AF_PLUGIN_DEVICE_TABLE_STATE_JOINED != deviceTable[i].state ||
@@ -46,69 +89,26 @@ void emberAfPollAttrByDeviceTable()
             continue;
         }
 
-        total_entries++;
-
-        if (deviceTable[i].keepalive_failcnt > 3) {
+        deviceTable[i].keepalive_failcnt++;
+        if (deviceTable[i].keepalive_failcnt > 2 * (sizeof(g_polllist) / sizeof(PollItem_S))) {
+            
+            if (0 != deviceTable[i].online) {
+                emberEventControlSetActive(addSubDevEventControl);    
+            }
+            
             deviceTable[i].online = 0;
             deviceTable[i].keepalive_failcnt = 0;
         }
-
-        if (1 != deviceTable[i].online) {
-            emberAfPluginDeviceTableInitiateRouteRepair(deviceTable[i].nodeId);
-        }
-
-        if ((uint8_t)(g_keepalive_seq + 1) == deviceTable[i].keepalive_seq) {
-            emberAfCorePrintln("[%d] g_keepalive_seq=%d deviceTable[i].keepalive_seq=%d", i,
-                                                                                          g_keepalive_seq,
-                                                                                          deviceTable[i].keepalive_seq);
-            continue;
-        }
-
-        if (DEMO_Z3DIMMERLIGHT == deviceTable[i].deviceId) {
-            attributeIdBuffer[0] = LOW_BYTE(ZCL_ON_OFF_ATTRIBUTE_ID);
-            attributeIdBuffer[1] = HIGH_BYTE(ZCL_ON_OFF_ATTRIBUTE_ID);
-            emberAfFillCommandGlobalClientToServerReadAttributes(ZCL_ON_OFF_CLUSTER_ID, attributeIdBuffer, sizeof(attributeIdBuffer));
-            emberAfDeviceTableCommandIndexSend(i);
-            HAL_SleepMs(i % 3 + 1);
-            msg_sent++;
-        }
-
-        if (DEMO_Z3DIMMERLIGHT == deviceTable[i].deviceId || 
-            DEMO_Z3CURTAIN == deviceTable[i].deviceId) {
-            attributeIdBuffer[0] = LOW_BYTE(ZCL_CURRENT_LEVEL_ATTRIBUTE_ID);
-            attributeIdBuffer[1] = HIGH_BYTE(ZCL_CURRENT_LEVEL_ATTRIBUTE_ID);
-            emberAfFillCommandGlobalClientToServerReadAttributes(ZCL_LEVEL_CONTROL_CLUSTER_ID, attributeIdBuffer, sizeof(attributeIdBuffer));
-            emberAfDeviceTableCommandIndexSend(i);
-            HAL_SleepMs(i % 3 + 1);
-            msg_sent++;
-        }
-
-        if (msg_sent > 0) {
-            deviceTable[i].keepalive_seq++;
-            deviceTable[i].keepalive_failcnt++;
-        }
-
-        if (msg_sent >= g_keepalive_once) {
-            break;
-        }
     }
-
-    /*if there is no device need to poll, increase the seq to start over  */
-    if (msg_sent == 0) {
-        g_keepalive_seq++;
-
-        //make sure all entries be polled in 30 seconds
-        if (total_entries > 0) {
-            g_keepalive_once = total_entries / (15000 / POLL_ATTR_INTERVAL) + 1;
-        }
-    }
-
-    emberAfCorePrintln("g_keepalive_seq=%d", g_keepalive_seq);
 }
 
 void pollAttrEventHandler()
 {
     emberEventControlSetInactive(pollAttrEventControl);
+
+    if (emberAfNetworkState() != EMBER_JOINED_NETWORK) {
+        return;
+    }
 
     if (true != aliyun_is_cloud_connected()) {
         emberEventControlSetDelayMS(pollAttrEventControl, POLL_ATTR_INTERVAL);
@@ -138,6 +138,7 @@ void addSubDevEventHandler()
     EmberEUI64  nulleui64 = {0xFF};
     
     emberEventControlSetInactive(addSubDevEventControl);
+    //emberAfCorePrintln("[%s][%d]trace", __func__, __LINE__);
     
     if (true != aliyun_is_cloud_connected()) {
         emberEventControlSetDelayMS(addSubDevEventControl, FRESH_DEV_INTERVAL);
@@ -147,6 +148,8 @@ void addSubDevEventHandler()
     EmberAfPluginDeviceTableEntry *deviceTable = emberAfDeviceTablePointer();
     uint8_t i;
 
+    //emberAfCorePrintln("[%s][%d]trace", __func__, __LINE__);
+
     memset(nulleui64, 0xFF, sizeof(nulleui64));
     for (i = 0; i < EMBER_AF_PLUGIN_DEVICE_TABLE_DEVICE_TABLE_SIZE; i++) {
         if (EMBER_AF_PLUGIN_DEVICE_TABLE_NULL_NODE_ID != deviceTable[i].nodeId &&
@@ -154,7 +157,8 @@ void addSubDevEventHandler()
             0 != memcmp(nulleui64, deviceTable[i].eui64, sizeof(nulleui64)) &&
             (DEMO_Z3DIMMERLIGHT == deviceTable[i].deviceId ||
              DEMO_Z3CURTAIN == deviceTable[i].deviceId)) {
-            
+
+            //emberAfCorePrintln("[%s][%d]cloud_devid=%d online=%d", __func__, __LINE__, deviceTable[i].cloud_devid, deviceTable[i].online);
             if (deviceTable[i].cloud_devid <= 0 &&
                 deviceTable[i].online == 1) {
                 aliyun_add_subdev(deviceTable[i].eui64, 
@@ -182,17 +186,19 @@ void addSubDevEventHandler()
     emberEventControlSetDelayMS(addSubDevEventControl, FRESH_DEV_INTERVAL);
 }
 
-void formNetworkRetryEventHandler()
+void commissionEventHandler()
 {
-	EmberStatus status;
+    EmberStatus status;
 
-    g_app_task_can_run = 1;
-
-	emberEventControlSetInactive(formNetworkRetryEventControl);
-    if (emberAfNetworkState() != EMBER_JOINED_NETWORK) {
-        status = emberAfPluginNetworkCreatorStart(true);
-        emberAfCorePrintln("%p network %p: 0x%X", "Form", "start", status);
-        emberEventControlSetDelayMS(formNetworkRetryEventControl, 15000);
+    emberEventControlSetInactive(commissionEventControl);
+    if (emberAfNetworkState() == EMBER_JOINED_NETWORK) {
+        if (1 == g_button1_pressed) {
+            nvm3_eraseAll(nvm3_defaultHandle);
+            halReboot();
+        }
+    } else {
+        status = emberAfPluginNetworkSteeringStart();
+        emberAfCorePrintln("start to steering, status=%X...", status);
     }
 }
 
@@ -203,6 +209,16 @@ void emberAfHalButtonIsrCallback(int8u button, int8u state)
             emberEventControlSetDelayMS(clearWiFiEventControl, 10000);
         } else {
             emberEventControlSetInactive(clearWiFiEventControl);
+        }
+    }
+
+    if (BUTTON1 == button) {
+        if (state == BUTTON_PRESSED) {
+            emberEventControlSetDelayMS(commissionEventControl, 10000);
+            g_button1_pressed = 1;
+        } else {
+            g_button1_pressed = 0;
+            emberEventControlSetInactive(commissionEventControl);
         }
     }
 }
@@ -235,9 +251,19 @@ void emberAfCloudConnectedHandler()
  */
 void emberAfMainInitCallback(void)
 {
-    emberEventControlSetActive(formNetworkRetryEventControl);    
-    emberEventControlSetDelayMS(pollAttrEventControl, POLL_ATTR_INTERVAL);
+    emberEventControlSetActive(commissionEventControl);
     emberEventControlSetDelayMS(addSubDevEventControl, FRESH_DEV_INTERVAL);
+}
+
+boolean emberAfStackStatusCallback(EmberStatus status)
+{
+    if (status == EMBER_NETWORK_DOWN) {
+        halClearLed(BOARDLED1);
+    } else if (status == EMBER_NETWORK_UP) {
+        halSetLed(BOARDLED1);
+        emberEventControlSetDelayMS(pollAttrEventControl, POLL_ATTR_INTERVAL);
+        g_app_task_can_run = 1;
+    }
 }
 
 /** @brief
@@ -337,6 +363,16 @@ void emberAfPluginDeviceTableDeviceLeftCallback(EmberEUI64 eui64)
     }
 }
 
+void emAfIEEEDiscoveryCallback(const EmberAfServiceDiscoveryResult* result)
+{
+    if (!emberAfHaveDiscoveryResponseStatus(result->status)) {
+        return;
+    }
+
+    uint8_t* eui64ptr = (uint8_t*)(result->responseData);
+    emberAfDeviceTableNewDeviceJoinHandler(result->matchAddress, eui64ptr);
+}
+
 boolean emberAfReadAttributesResponseCallback(EmberAfClusterId clusterId, int8u *buffer, int16u bufLen)
 {
     EmberNodeId nodeID;
@@ -345,11 +381,24 @@ boolean emberAfReadAttributesResponseCallback(EmberAfClusterId clusterId, int8u 
     EmberAfPluginDeviceTableEntry *deviceTable = emberAfDeviceTablePointer();
 
     nodeID = emberGetSender();
+    if (nodeID == emberGetNodeId()) {
+        return false;
+    }
+    
     index = emberAfDeviceTableGetEndpointFromNodeIdAndEndpoint(nodeID, emberAfCurrentCommand()->apsFrame->sourceEndpoint);
     if (EMBER_AF_PLUGIN_DEVICE_TABLE_NULL_INDEX == index) {
         return false;
     }
 
+    if (EMBER_AF_PLUGIN_DEVICE_TABLE_STATE_JOINED != deviceTable[index].state) {
+        emberAfFindIeeeAddress(nodeID, emAfIEEEDiscoveryCallback);
+        return false;
+    }
+
+    if (1 != deviceTable[index].online) {
+        emberEventControlSetActive(addSubDevEventControl);    
+    }
+    
     deviceTable[index].online = 1;
     deviceTable[index].keepalive_failcnt = 0;
 

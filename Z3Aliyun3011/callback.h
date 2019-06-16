@@ -16,6 +16,9 @@
 
 
 #include "app/framework/include/af-types.h"
+#include EMBER_AF_API_NETWORK_STEERING
+
+
 
 
 /** @name Non-Cluster Related Callbacks */
@@ -26436,17 +26439,21 @@ void emberAfPluginIdentifyStopFeedbackCallback(uint8_t endpoint);
 /** @} END Identify Cluster Plugin Callbacks */
 
 
-/** @name Concentrator Support Plugin Callbacks */
+/** @name Update TC Link Key Plugin Callbacks */
 // @{
 
-/** @brief Broadcast Sent
+/** @brief Status
  *
- * This function is called when a new MTORR broadcast has been successfully
- * sent by the concentrator plugin.
+ * This callback is fired when the Update Link Key exchange process is updated
+ * with a status from the stack. Implementations will know that the Update TC
+ * Link Key plugin has completed its link key request when the keyStatus
+ * parameter is EMBER_VERIFY_LINK_KEY_SUCCESS.
  *
+ * @param keyStatus An ::EmberKeyStatus value describing the success or failure
+ * of the key exchange process. Ver.: always
  */
-void emberAfPluginConcentratorBroadcastSentCallback(void);
-/** @} END Concentrator Support Plugin Callbacks */
+void emberAfPluginUpdateTcLinkKeyStatusCallback(EmberKeyStatus keyStatus);
+/** @} END Update TC Link Key Plugin Callbacks */
 
 
 /** @name Form and Join Library Plugin Callbacks */
@@ -26481,38 +26488,61 @@ void emberAfPluginFormAndJoinUnusedPanIdFoundCallback(EmberPanId panId,
 /** @} END Form and Join Library Plugin Callbacks */
 
 
-/** @name Network Creator Plugin Callbacks */
+/** @name Network Steering Plugin Callbacks */
 // @{
 
 /** @brief Complete
  *
- * This callback notifies the user that the network creation process has
- * completed successfully.
+ * This callback is fired when the Network Steering plugin is complete.
  *
- * @param network The network that the network creator plugin successfully
- * formed. Ver.: always
- * @param usedSecondaryChannels Whether or not the network creator wants to
- * form a network on the secondary channels Ver.: always
+ * @param status On success this will be set to EMBER_SUCCESS to indicate a
+ * network was joined successfully. On failure this will be the status code of
+ * the last join or scan attempt. Ver.: always
+ * @param totalBeacons The total number of 802.15.4 beacons that were heard,
+ * including beacons from different devices with the same PAN ID. Ver.: always
+ * @param joinAttempts The number of join attempts that were made to get onto
+ * an open Zigbee network. Ver.: always
+ * @param finalState The finishing state of the network steering process. From
+ * this, one is able to tell on which channel mask and with which key the
+ * process was complete. Ver.: always
  */
-void emberAfPluginNetworkCreatorCompleteCallback(const EmberNetworkParameters *network,
-                                                 bool usedSecondaryChannels);
-/** @brief Get Pan Id
- *
- * This callback is called when the Network Creator plugin needs the PAN ID for
- * the network it is about to create. By default, the callback will return a
- * random 16-bit value.
- *
- */
-EmberPanId emberAfPluginNetworkCreatorGetPanIdCallback(void);
+void emberAfPluginNetworkSteeringCompleteCallback(EmberStatus status,
+                                                  uint8_t totalBeacons,
+                                                  uint8_t joinAttempts,
+                                                  uint8_t finalState);
 /** @brief Get Power For Radio Channel
  *
- * This callback is called when the Network Creator plugin needs the radio power for
- * the network it is about to create. By default, the callback will use the radio
- * power specified in the relevant plugin option.
+ * This callback is fired when the Network Steering plugin needs to set the
+ * power level. The application has the ability to change the max power level
+ * used for this particular channel.
  *
+ * @param channel The channel that the plugin is inquiring about the power
+ * level. Ver.: always
  */
-int8_t emberAfPluginNetworkCreatorGetRadioPowerCallback(void);
-/** @} END Network Creator Plugin Callbacks */
+int8_t emberAfPluginNetworkSteeringGetPowerForRadioChannelCallback(uint8_t channel);
+/** @brief Get Distributed Key
+ *
+ * This callback is fired when the Network Steering plugin needs to set the distributed
+ * key. The application set the distributed key from Zigbee Alliance thru this callback
+ * or the network steering will use the default test key.
+ *
+ * @param pointer to the distributed key struct
+ * @return true if the key is loaded successfully, otherwise false.
+ * level. Ver.: always
+ */
+bool emberAfPluginNetworkSteeringGetDistributedKeyCallback(EmberKeyData * key);
+/** @brief Get Node Type
+ *
+ * This callback allows the application to set the node type that the network
+ * steering process will use in joining a network.
+ *
+ * @param state The current ::EmberAfPluginNetworkSteeringJoiningState.
+ *
+ * @return An ::EmberNodeType value that the network steering process will
+ * try to join a network as.
+ */
+EmberNodeType emberAfPluginNetworkSteeringGetNodeTypeCallback(EmberAfPluginNetworkSteeringJoiningState state);
+/** @} END Network Steering Plugin Callbacks */
 
 
 /** @name Idle/Sleep Plugin Callbacks */

@@ -9,13 +9,11 @@
 // Init function declarations.
 void emberAfInit(void);
 void emberAfMainInitCallback(void);
-void emberAfPluginNetworkCreatorSecurityInitCallback(void);
 
 void emAfInit(void)
 {
   emberAfInit();
   emberAfMainInitCallback();
-  emberAfPluginNetworkCreatorSecurityInitCallback();
 }
 
 // Tick function declarations.
@@ -60,12 +58,12 @@ bool emAfRetrieveAttributeAndCraftResponse(uint8_t endpoint, EmberAfClusterId cl
 }
 
 // ZigbeeKeyEstablishment function declarations.
-void emberAfPluginNetworkCreatorSecurityZigbeeKeyEstablishmentCallback(EmberEUI64 partner, EmberKeyStatus status);
+void emberAfPluginUpdateTcLinkKeyZigbeeKeyEstablishmentCallback(EmberEUI64 partner, EmberKeyStatus status);
 void emberAfZigbeeKeyEstablishmentCallback(EmberEUI64 partner, EmberKeyStatus status);
 
 void emAfZigbeeKeyEstablishment(EmberEUI64 partner, EmberKeyStatus status)
 {
-  emberAfPluginNetworkCreatorSecurityZigbeeKeyEstablishmentCallback(partner, status);
+  emberAfPluginUpdateTcLinkKeyZigbeeKeyEstablishmentCallback(partner, status);
   emberAfZigbeeKeyEstablishmentCallback(partner, status);
 }
 

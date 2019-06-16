@@ -347,8 +347,8 @@ int aliyun_permit_join_event_handler(const char *product_key, const int time)
 
     //aliyun_ctx->permit_join = 1;
 
-    emberAfPluginNetworkCreatorSecurityOpenNetwork();
-    emberAfPluginFindAndBindTargetStart(1);
+    //emberAfPluginNetworkCreatorSecurityOpenNetwork();
+    //emberAfPluginFindAndBindTargetStart(1);
     return 0;
 }
 
