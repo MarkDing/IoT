@@ -6,9 +6,9 @@
 项目中涉及的平台和组件包括：
 - [x] [天猫精灵平台](https://open.aligenie.com/)，只需购买一台天猫精灵智能音箱，使用淘宝账号登录即可；
 - [x] [阿里物联生活平台](https://living.aliyun.com)，需要注册帐号，并创建相关产品。
-- [ ] Zigbee网关, 即本项目开发的目标。由WiFi和Zigbee两部分组成，用UART接口连接二者。
-    - [ ] Zigbee部分，基于Silicon Labs公司的EFR32MG12以及EmberZnet SDK开发；
-    - [ ] WiFi部分，基于Silicon Labs公司的WGM110模组开发；
+- [x] Zigbee网关, 即本项目开发的目标。由WiFi和Zigbee两部分组成，用UART接口连接二者。
+    - [x] Zigbee部分，基于Silicon Labs公司的EFR32MG12以及EmberZnet SDK开发；
+    - [x] WiFi部分，基于Silicon Labs公司的WGM110模组开发；
 
 涉及的资源和资料链接:
 - [x] [阿里物联生活平台](https://living.aliyun.com/doc#index.html)
