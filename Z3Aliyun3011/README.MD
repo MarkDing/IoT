@@ -1,7 +1,7 @@
 <center> <h1>Zigbee Router Bridge连接到阿里云</h1> </center>
 本项目的主要目的开发一个Zigbee的router，通过这个router将Zigbee设备连接到阿里云，从而实现使用天猫精灵来控制Zigbee网络中的设备。项目的示意图如下：  
 
-![architecture](./Documents/images/arch.png)  
+![architecture](./Documents/images/arch.PNG)  
 
 此外，在本项目中，使用Amazon的Echo Plus作为Zigbee的coordinator，首先将Zigbee设备加入由echo plus创建的Zigbee网络中，通过echo plus可以直接控制。另外一方面，本项目开发的router bridge也是加入到echo plus的网络中，然后通过这个bridge将zigbee网络中的设备加入阿里云。最终可以实现同时使用天猫精灵和echo plus来控制。
 
