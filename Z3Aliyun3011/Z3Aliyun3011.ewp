@@ -201,16 +201,17 @@
           <state>__SOURCEFILE__="$FILE_FNAME$"</state>
           <state>HAL_CONFIG=1</state>
           <state>EMBER_AF_USE_HWCONF</state>
-          <state>MBEDTLS_CONFIG_FILE="stack/config/mbedtls/config-trng.h"</state>
-          <state>USE_NVM3</state>
-          <state>NVM3_DEFAULT_NVM_SIZE=NVM3_FLASH_PAGES*FLASH_PAGE_SIZE</state>
-          <state>EMLIB_USER_CONFIG</state>
-          <state>MICRIUMOS</state>
+          <state>EMBER_ROUTE_TABLE_SIZE=16</state>
           <state>EMBER_AF_API_EMBER_TYPES="stack/include/ember-types.h"</state>
           <state>EMBER_AF_API_DEBUG_PRINT="app/framework/util/print.h"</state>
           <state>EMBER_AF_API_AF_HEADER="app/framework/include/af.h"</state>
           <state>EMBER_AF_API_AF_SECURITY_HEADER="app/framework/security/af-security.h"</state>
           <state>EMBER_STACK_ZIGBEE</state>
+          <state>MBEDTLS_CONFIG_FILE="stack/config/mbedtls/config-trng.h"</state>
+          <state>USE_NVM3</state>
+          <state>NVM3_DEFAULT_NVM_SIZE=NVM3_FLASH_PAGES*FLASH_PAGE_SIZE</state>
+          <state>EMLIB_USER_CONFIG</state>
+          <state>MICRIUMOS</state>
           <state>APPLICATION_TOKEN_HEADER="app/builder/Z3Aliyun3011/afv2-token.h"</state>
           <state>APPLICATION_MFG_TOKEN_HEADER="app/builder/Z3Aliyun3011/afv2-mfg-token.h"</state>
 <state>NVM3_FLASH_PAGES=18</state><state>NVM3_DEFAULT_CACHE_SIZE=254</state><state>NVM3_MAX_OBJECT_SIZE=254</state><state>NVM3_DEFAULT_REPACK_HEADROOM=0</state><state>PHY_RAIL=1</state>
@@ -583,16 +584,17 @@
           <state>ZA_GENERATED_HEADER="app/builder/Z3Aliyun3011/Z3Aliyun3011.h"</state>
           <state>HAL_CONFIG=1</state>
           <state>EMBER_AF_USE_HWCONF</state>
-          <state>MBEDTLS_CONFIG_FILE="stack/config/mbedtls/config-trng.h"</state>
-          <state>USE_NVM3</state>
-          <state>NVM3_DEFAULT_NVM_SIZE=NVM3_FLASH_PAGES*FLASH_PAGE_SIZE</state>
-          <state>EMLIB_USER_CONFIG</state>
-          <state>MICRIUMOS</state>
+          <state>EMBER_ROUTE_TABLE_SIZE=16</state>
           <state>EMBER_AF_API_EMBER_TYPES="stack/include/ember-types.h"</state>
           <state>EMBER_AF_API_DEBUG_PRINT="app/framework/util/print.h"</state>
           <state>EMBER_AF_API_AF_HEADER="app/framework/include/af.h"</state>
           <state>EMBER_AF_API_AF_SECURITY_HEADER="app/framework/security/af-security.h"</state>
           <state>EMBER_STACK_ZIGBEE</state>
+          <state>MBEDTLS_CONFIG_FILE="stack/config/mbedtls/config-trng.h"</state>
+          <state>USE_NVM3</state>
+          <state>NVM3_DEFAULT_NVM_SIZE=NVM3_FLASH_PAGES*FLASH_PAGE_SIZE</state>
+          <state>EMLIB_USER_CONFIG</state>
+          <state>MICRIUMOS</state>
           <state>APPLICATION_TOKEN_HEADER="app/builder/Z3Aliyun3011/afv2-token.h"</state>
           <state>APPLICATION_MFG_TOKEN_HEADER="app/builder/Z3Aliyun3011/afv2-mfg-token.h"</state>
 <state>NVM3_FLASH_PAGES=18</state><state>NVM3_DEFAULT_CACHE_SIZE=254</state><state>NVM3_MAX_OBJECT_SIZE=254</state><state>NVM3_DEFAULT_REPACK_HEADROOM=0</state><state>PHY_RAIL=1</state>
@@ -1272,6 +1274,10 @@
 <file><name>$PROJ_DIR$/../../../protocol\zigbee\app\framework\plugin\address-table\address-table-cli.c</name></file>
 <file><name>$PROJ_DIR$/../../../platform\base\hal\plugin\antenna-stub\antenna-stub.c</name></file>
 <file><name>$PROJ_DIR$/../../../platform\radio\rail_lib\plugin\coexistence\protocol\ieee802154\coexistence-802154.c</name></file>
+<file><name>$PROJ_DIR$/../../../protocol\zigbee\app\framework\plugin\concentrator\concentrator-support.c</name></file>
+<file><name>$PROJ_DIR$/../../../protocol\zigbee\app\framework\plugin\concentrator\concentrator-support-cli.c</name></file>
+<file><name>$PROJ_DIR$/../../../protocol\zigbee\app\framework\plugin\concentrator\source-route-common.c</name></file>
+<file><name>$PROJ_DIR$/../../../protocol\zigbee\app\framework\plugin\concentrator\source-route.c</name></file>
 <file><name>$PROJ_DIR$/../../../protocol\zigbee\app\framework\plugin\counters\counters-cli.c</name></file>
 <file><name>$PROJ_DIR$/../../../protocol\zigbee\app\framework\plugin\counters\counters-ota.c</name></file>
 <file><name>$PROJ_DIR$/../../../protocol\zigbee\app\framework\plugin\counters\counters-soc.c</name></file>

@@ -28,6 +28,7 @@ extern EmberApsFrame *emAfCommandApsFrame;
 
 static uint8_t    g_app_task_can_run = 0;
 static uint8_t    g_button1_pressed = 0;
+static uint16_t   g_poll_interval = POLL_ATTR_INTERVAL;
 
 EmberEventControl pollAttrEventControl;
 EmberEventControl clearWiFiEventControl;
@@ -54,6 +55,29 @@ void emberAfPollAttrByDeviceTable()
     uint8_t attributeIdBuffer[2];
     EmberAfPluginDeviceTableEntry *deviceTable = emberAfDeviceTablePointer();
     uint8_t  i;
+    uint8_t  offlinecnt = 0;
+
+    for (i = 0; i < EMBER_AF_PLUGIN_DEVICE_TABLE_DEVICE_TABLE_SIZE; i++) {
+        if (EMBER_AF_PLUGIN_DEVICE_TABLE_NULL_NODE_ID == deviceTable[i].nodeId ||
+            EMBER_AF_PLUGIN_DEVICE_TABLE_STATE_JOINED != deviceTable[i].state ||
+            (DEMO_Z3DIMMERLIGHT != deviceTable[i].deviceId &&
+             DEMO_Z3CURTAIN != deviceTable[i].deviceId)) {
+            continue;
+        }
+
+        if (1 != deviceTable[i].online) {
+            offlinecnt++;
+        }
+    }
+
+    #if  0
+    if (offlinecnt > 0) {
+        g_poll_interval = 10000;
+    } else {
+        g_poll_interval = 20000;
+    }
+    #endif /* #if 0 */
+
     
     attributeIdBuffer[0] = LOW_BYTE(g_polllist[g_current_poll_index].attrID);
     attributeIdBuffer[1] = HIGH_BYTE(g_polllist[g_current_poll_index].attrID);
@@ -74,6 +98,8 @@ void emberAfPollAttrByDeviceTable()
                                 emAfCommandApsFrame,
                                 1,
                                 payload);
+    emberReleaseMessageBuffer(payload);
+    
     emberAfCorePrintln("[%d] broadcast read cluster[%X] attr[%X] status=%X", __LINE__, 
                                                                              g_polllist[g_current_poll_index].clusterID,
                                                                              g_polllist[g_current_poll_index].attrID,
@@ -89,15 +115,20 @@ void emberAfPollAttrByDeviceTable()
             continue;
         }
 
-        deviceTable[i].keepalive_failcnt++;
-        if (deviceTable[i].keepalive_failcnt > 2 * (sizeof(g_polllist) / sizeof(PollItem_S))) {
-            
-            if (0 != deviceTable[i].online) {
-                emberEventControlSetActive(addSubDevEventControl);    
-            }
-            
-            deviceTable[i].online = 0;
+        if (0xFF != emberChildIndex(deviceTable[i].nodeId)) {
+            deviceTable[i].online = 1;
             deviceTable[i].keepalive_failcnt = 0;
+        } else {
+            deviceTable[i].keepalive_failcnt++;
+            if (deviceTable[i].keepalive_failcnt > 2 * (sizeof(g_polllist) / sizeof(PollItem_S))) {
+                
+                if (0 != deviceTable[i].online) {
+                    emberEventControlSetActive(addSubDevEventControl);    
+                }
+                
+                deviceTable[i].online = 0;
+                deviceTable[i].keepalive_failcnt = 0;
+            }
         }
     }
 }
@@ -111,12 +142,12 @@ void pollAttrEventHandler()
     }
 
     if (true != aliyun_is_cloud_connected()) {
-        emberEventControlSetDelayMS(pollAttrEventControl, POLL_ATTR_INTERVAL);
+        emberEventControlSetDelayMS(pollAttrEventControl, g_poll_interval);
         return;
     }
 
     emberAfPollAttrByDeviceTable();
-    emberEventControlSetDelayMS(pollAttrEventControl, POLL_ATTR_INTERVAL);
+    emberEventControlSetDelayMS(pollAttrEventControl, g_poll_interval);
 }
 
 void clearWiFiEventHandler()
@@ -261,7 +292,7 @@ boolean emberAfStackStatusCallback(EmberStatus status)
         halClearLed(BOARDLED1);
     } else if (status == EMBER_NETWORK_UP) {
         halSetLed(BOARDLED1);
-        emberEventControlSetDelayMS(pollAttrEventControl, POLL_ATTR_INTERVAL);
+        emberEventControlSetDelayMS(pollAttrEventControl, g_poll_interval);
         g_app_task_can_run = 1;
     }
 }
@@ -525,13 +556,15 @@ static void em_showtxpwr(void)
     printf("txpwr:%d\r\n", data.radioTxPower);
 }
 
-static void em_txpower20(void)
+static void em_settxpower(void)
 {
     tokTypeStackNodeData data;
 
+    uint8_t pwr = (uint8_t)emberUnsignedCommandArgument(0);
+
     memset(&data, 0xFF, sizeof(data));
     halCommonGetToken(&data, TOKEN_STACK_NODE_DATA);
-    data.radioTxPower = 20;
+    data.radioTxPower = pwr;
     halCommonSetToken(TOKEN_STACK_NODE_DATA, &data);
 }
 
@@ -541,6 +574,6 @@ EmberCommandEntry emberAfCustomCommands[] = {
   emberCommandEntryAction("devshow", dev_show, "", ""),
   emberCommandEntryAction("wificlear", wifi_clear, "", ""),
   emberCommandEntryAction("showtxpwr", em_showtxpwr, "", ""),
-  emberCommandEntryAction("txpwr20", em_txpower20, "", ""),
+  emberCommandEntryAction("settxpwr", em_settxpower, "u", ""),
   emberCommandEntryTerminator()
 };

@@ -229,6 +229,26 @@
 			<locationURI>STUDIO_SDK_LOC/platform/base/hal/plugin/antenna-stub/antenna-stub.c</locationURI>
 		</link>
 		<link>
+			<name>concentrator/concentrator-support-cli.c</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/protocol/zigbee/app/framework/plugin/concentrator/concentrator-support-cli.c</locationURI>
+		</link>
+		<link>
+			<name>concentrator/concentrator-support.c</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/protocol/zigbee/app/framework/plugin/concentrator/concentrator-support.c</locationURI>
+		</link>
+		<link>
+			<name>concentrator/source-route-common.c</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/protocol/zigbee/app/framework/plugin/concentrator/source-route-common.c</locationURI>
+		</link>
+		<link>
+			<name>concentrator/source-route.c</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/protocol/zigbee/app/framework/plugin/concentrator/source-route.c</locationURI>
+		</link>
+		<link>
 			<name>counters/counters-cli.c</name>
 			<type>1</type>
 			<locationURI>STUDIO_SDK_LOC/protocol/zigbee/app/framework/plugin/counters/counters-cli.c</locationURI>

@@ -466,7 +466,6 @@ void emAfDeviceTableSave(void)
 
 #endif // defined(EZSP_HOST) && !defined(EMBER_TEST)
 
-    #if  0
     EmberAfPluginDeviceTableEntry *deviceTable = emberAfDeviceTablePointer();
     tokTypeDevTable data;
     uint8_t i;
@@ -485,7 +484,6 @@ void emAfDeviceTableSave(void)
             halCommonSetIndexedToken(TOKEN_DEV_TABLE, i, &data);
         }
     }
-    #endif /* #if 0 */
 }
 
 void emAfDeviceTableLoad(void)
@@ -538,7 +536,6 @@ void emAfDeviceTableLoad(void)
 
 #endif // #if defined(EZSP_HOST) && !defined(EMBER_TEST)
 
-    #if  0
     EmberAfPluginDeviceTableEntry *deviceTable = emberAfDeviceTablePointer();
     memset(deviceTable, 0xFF, sizeof(EmberAfPluginDeviceTableEntry) * EMBER_AF_PLUGIN_DEVICE_TABLE_DEVICE_TABLE_SIZE);
 
@@ -562,7 +559,6 @@ void emAfDeviceTableLoad(void)
             deviceTable[i].nodeId = EMBER_AF_PLUGIN_DEVICE_TABLE_NULL_NODE_ID;
         }
     }
-    #endif /* #if 0 */
 }
 
 // --------------------------------
@@ -631,6 +627,27 @@ void emberAfDeviceTableSend(EmberEUI64 eui64, uint8_t endpoint)
   }
 }
 
+#if  0
+static void emberAfDeviceTableSendMsgCallback(EmberOutgoingMessageType type,
+                                            uint16_t indexOrDestination,
+                                            EmberApsFrame *apsFrame,
+                                            uint16_t msgLen,
+                                            uint8_t *message,
+                                            EmberStatus status)
+{
+    if (status != EMBER_SUCCESS) {
+        EmberMessageBuffer payload = emberFillLinkedBuffers(message, msgLen);
+        if (payload == EMBER_NULL_MESSAGE_BUFFER) {
+            return;
+        }
+        
+        emberSendUnicast(EMBER_OUTGOING_DIRECT, indexOrDestination, apsFrame, payload);
+        
+        emberReleaseMessageBuffer(payload);
+    }
+}
+#endif /* #if 0 */
+
 void emberAfDeviceTableCommandIndexSendWithEndpoint(uint16_t index,
                                                     uint8_t endpoint)
 {
@@ -646,9 +663,13 @@ void emberAfDeviceTableCommandIndexSendWithEndpoint(uint16_t index,
   }
 
   emAfCommandApsFrame->destinationEndpoint = endpoint;
+  emAfCommandApsFrame->options |= EMBER_APS_OPTION_ENABLE_ROUTE_DISCOVERY;
+  emAfCommandApsFrame->options |= EMBER_APS_OPTION_RETRY;
 //  emberAfCorePrintln("device table send with ep: 0x%2X, %d",
 //                     nodeId,
 //                     endpoint);
+
+  //status = emberAfSendCommandUnicastWithCallback(EMBER_OUTGOING_DIRECT, nodeId, emberAfDeviceTableSendMsgCallback);
   status = emberAfSendCommandUnicast(EMBER_OUTGOING_DIRECT, nodeId);
 
   zclCmdIsBuilt = false;

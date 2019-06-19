@@ -964,6 +964,52 @@
 
 /** @} */ // end group plugin-address-table
 
+/** @addtogroup plugin-concentrator Plugin Commands: Concentrator
+ * @ingroup cli
+ * The Concentrator plugin contributes several CLI commands to the application
+ * framework for controlling the sending of MTORRs.
+ * 
+ * @{
+ */
+
+/** @brief <b>plugin concentrator agg </b>
+ *   - <i>(Requires Concentrator Support to be enabled on this device.) Schedules a ZigBee PRO Many To One Route Request (MTORR) to be sent out at next opportunity, which will cause aggregation (many-to-one) routes to be created towards this concentrator.</i>
+ */
+#define EMBER_AF_DOXYGEN_CLI_COMMAND_PLUGIN_CONCENTRATOR_PLUGIN_CONCENTRATOR_AGG
+
+/** @brief <b>plugin concentrator print-host-table </b>
+ *   - <i>Print the host source route table.</i>
+ */
+#define EMBER_AF_DOXYGEN_CLI_COMMAND_PLUGIN_CONCENTRATOR_PLUGIN_CONCENTRATOR_PRINT_HOST_TABLE
+
+/** @brief <b>plugin concentrator print-table </b>
+ *   - <i>Print the SOC/NCP source route table.</i>
+ */
+#define EMBER_AF_DOXYGEN_CLI_COMMAND_PLUGIN_CONCENTRATOR_PLUGIN_CONCENTRATOR_PRINT_TABLE
+
+/** @brief <b>plugin concentrator set-router-behavior [behavior:1] </b>
+ *   - <i>This command allows the user to set the router behavior for this plugin. The argument values come from concentrator-support.h in the enum with members starting with EMBER_AF_PLUGIN_CONCENTRATOR_ROUTER_BEHAVIOR_.</i>
+ *     - behavior - INT8U - The value of a EMBER_AF_PLUGIN_CONCENTRATOR_ROUTER_BEHAVIOR_ enum member.
+ */
+#define EMBER_AF_DOXYGEN_CLI_COMMAND_PLUGIN_CONCENTRATOR_PLUGIN_CONCENTRATOR_SET_ROUTER_BEHAVIOR
+
+/** @brief <b>plugin concentrator start </b>
+ *   - <i>Starts the periodic broadcast of MTORRs</i>
+ */
+#define EMBER_AF_DOXYGEN_CLI_COMMAND_PLUGIN_CONCENTRATOR_PLUGIN_CONCENTRATOR_START
+
+/** @brief <b>plugin concentrator status </b>
+ *   - <i>Prints current status and configured parameters of the concentrator</i>
+ */
+#define EMBER_AF_DOXYGEN_CLI_COMMAND_PLUGIN_CONCENTRATOR_PLUGIN_CONCENTRATOR_STATUS
+
+/** @brief <b>plugin concentrator stop </b>
+ *   - <i>Stops the periodic broadcast of MTORRs</i>
+ */
+#define EMBER_AF_DOXYGEN_CLI_COMMAND_PLUGIN_CONCENTRATOR_PLUGIN_CONCENTRATOR_STOP
+
+/** @} */ // end group plugin-concentrator
+
 /** @addtogroup plugin-counters Plugin Commands: Counters
  * @ingroup cli
  * This plugin provides APIs and CLI commands for reading and manipulating
@@ -1874,6 +1920,16 @@
  */
 
 /** @} */ // end group plugin-address-table
+
+/** @addtogroup plugin-concentrator Plugin Commands: Concentrator
+ * @ingroup cli
+ * The Concentrator plugin contributes several CLI commands to the application
+ * framework for controlling the sending of MTORRs.
+ * 
+ * @{
+ */
+
+/** @} */ // end group plugin-concentrator
 
 /** @addtogroup plugin-counters Plugin Commands: Counters
  * @ingroup cli

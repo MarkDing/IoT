@@ -714,6 +714,7 @@ lastHwConfFileUsed=PATH(STACK_RELATIVE):app/builder/Z3Aliyun3011/brd4164a_efr32m
 {setupId:information
 }
 {setupId:macros
+-DEMBER_ROUTE_TABLE_SIZE=16
 }
 {setupId:mpsi
 - mappings
@@ -798,7 +799,8 @@ appPlugin:command-relay,false
 appPlugin:comms-hub-function,false
 appPlugin:comms-hub-function-sub-ghz,true
 
-appPlugin:concentrator,false
+appPlugin:concentrator,true
+
 appPlugin:configuration-server,false
 appPlugin:connection-manager,false
 appPlugin:counters,true
@@ -1104,7 +1106,11 @@ AppPluginOption(efr32~family[M]~series[1]~device_configuration[2]~performance[P]
 
 AppPluginOption(efr32~family[M]~series[1]~device_configuration[2]~performance[P]~radio[433]~flash[1024K]~temp[G]~package[L]~pins[125]~!module+BRD4164A+iar):EMBER_MAX_END_DEVICE_CHILDREN,10
 
-AppPluginOption(efr32~family[M]~series[1]~device_configuration[2]~performance[P]~radio[433]~flash[1024K]~temp[G]~package[L]~pins[125]~!module+BRD4164A+iar):EMBER_END_DEVICE_POLL_TIMEOUT,Minutes-16384
-
 AppPluginOption(efr32~family[M]~series[1]~device_configuration[2]~performance[P]~radio[433]~flash[1024K]~temp[G]~package[L]~pins[125]~!module+BRD4164A+iar):EMBER_AF_PLUGIN_NETWORK_CREATOR_SECURITY_ALLOW_TC_REJOIN_WITH_WELL_KNOWN_KEY,true
+
+AppPluginOption(efr32~family[M]~series[1]~device_configuration[2]~performance[P]~radio[433]~flash[1024K]~temp[G]~package[L]~pins[125]~!module+BRD4164A+iar):EMBER_AF_PLUGIN_CONCENTRATOR_MAX_TIME_BETWEEN_BROADCASTS_SECONDS,30
+
+AppPluginOption(efr32~family[M]~series[1]~device_configuration[2]~performance[P]~radio[433]~flash[1024K]~temp[G]~package[L]~pins[125]~!module+BRD4164A+iar):EMBER_AF_PLUGIN_CONCENTRATOR_MIN_TIME_BETWEEN_BROADCASTS_SECONDS,5
+
+AppPluginOption(efr32~family[M]~series[1]~device_configuration[2]~performance[P]~radio[433]~flash[1024K]~temp[G]~package[L]~pins[125]~!module+BRD4164A+iar):EMBER_END_DEVICE_POLL_TIMEOUT,Minutes-16384
 

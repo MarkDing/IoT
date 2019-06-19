@@ -113,11 +113,13 @@ const EmberAfGenericClusterFunction emberAfFuncArrayIdentifyClusterServer[] = { 
 // Code used to configure the cluster event mechanism
 #define EMBER_AF_GENERATED_EVENT_CODE \
   EmberEventControl emberAfIdentifyClusterServerTickCallbackControl1; \
+  extern EmberEventControl emberAfPluginConcentratorUpdateEventControl; \
   extern EmberEventControl emberAfPluginDeviceTableNewDeviceEventControl; \
   extern EmberEventControl emberAfPluginFormAndJoinCleanupEventControl; \
   extern EmberEventControl emberAfPluginNetworkSteeringFinishSteeringEventControl; \
   extern EmberEventControl emberAfPluginScanDispatchScanEventControl; \
   extern EmberEventControl emberAfPluginUpdateTcLinkKeyBeginTcLinkKeyUpdateEventControl; \
+  extern void emberAfPluginConcentratorUpdateEventHandler(void); \
   extern void emberAfPluginDeviceTableNewDeviceEventHandler(void); \
   extern void emberAfPluginFormAndJoinCleanupEventHandler(void); \
   extern void emberAfPluginNetworkSteeringFinishSteeringEventHandler(void); \
@@ -144,6 +146,7 @@ const EmberAfGenericClusterFunction emberAfFuncArrayIdentifyClusterServer[] = { 
 // EmberEventData structs used to populate the EmberEventData table
 #define EMBER_AF_GENERATED_EVENTS   \
   { &emberAfIdentifyClusterServerTickCallbackControl1, emberAfIdentifyClusterServerTickCallbackWrapperFunction1 }, \
+  { &emberAfPluginConcentratorUpdateEventControl, emberAfPluginConcentratorUpdateEventHandler }, \
   { &emberAfPluginDeviceTableNewDeviceEventControl, emberAfPluginDeviceTableNewDeviceEventHandler }, \
   { &emberAfPluginFormAndJoinCleanupEventControl, emberAfPluginFormAndJoinCleanupEventHandler }, \
   { &emberAfPluginNetworkSteeringFinishSteeringEventControl, emberAfPluginNetworkSteeringFinishSteeringEventHandler }, \
@@ -157,6 +160,7 @@ const EmberAfGenericClusterFunction emberAfFuncArrayIdentifyClusterServer[] = { 
 
 #define EMBER_AF_GENERATED_EVENT_STRINGS   \
   "Identify Cluster Server EP 1",  \
+  "Concentrator Support Plugin Update",  \
   "Device Table Plugin NewDevice",  \
   "Form and Join Library Plugin Cleanup",  \
   "Network Steering Plugin FinishSteering",  \
@@ -177,33 +181,56 @@ const EmberAfGenericClusterFunction emberAfFuncArrayIdentifyClusterServer[] = { 
 
 #define EMBER_AF_GENERATED_PLUGIN_INIT_FUNCTION_DECLARATIONS \
   void emberAfPluginDeviceTableInitCallback(void); \
+  void emberAfPluginConcentratorInitCallback(void); \
   void emberAfPluginIdleSleepInitCallback(void); \
   void emberAfPluginCountersInitCallback(void); \
 
 
 #define EMBER_AF_GENERATED_PLUGIN_INIT_FUNCTION_CALLS \
   emberAfPluginDeviceTableInitCallback(); \
+  emberAfPluginConcentratorInitCallback(); \
   emberAfPluginIdleSleepInitCallback(); \
   emberAfPluginCountersInitCallback(); \
 
 
 #define EMBER_AF_GENERATED_PLUGIN_NCP_INIT_FUNCTION_DECLARATIONS \
+  void emberAfPluginConcentratorNcpInitCallback(bool memoryAllocation); \
   void emberAfPluginAddressTableNcpInitCallback(bool memoryAllocation); \
 
 
 #define EMBER_AF_GENERATED_PLUGIN_NCP_INIT_FUNCTION_CALLS \
+  emberAfPluginConcentratorNcpInitCallback(memoryAllocation); \
   emberAfPluginAddressTableNcpInitCallback(memoryAllocation); \
 
 
 #define EMBER_AF_GENERATED_PLUGIN_STACK_STATUS_FUNCTION_DECLARATIONS \
   void emberAfPluginDeviceTableStackStatusCallback(EmberStatus status); \
+  void emberAfPluginConcentratorStackStatusCallback(EmberStatus status); \
   void emberAfPluginNetworkSteeringStackStatusCallback(EmberStatus status); \
 
 
 #define EMBER_AF_GENERATED_PLUGIN_STACK_STATUS_FUNCTION_CALLS \
   emberAfPluginDeviceTableStackStatusCallback(status); \
+  emberAfPluginConcentratorStackStatusCallback(status); \
   emberAfPluginNetworkSteeringStackStatusCallback(status); \
 
+
+#define EMBER_AF_GENERATED_PLUGIN_MESSAGE_SENT_FUNCTION_DECLARATIONS \
+  void emberAfPluginConcentratorMessageSentCallback(EmberOutgoingMessageType type, \
+                    uint16_t indexOrDestination, \
+                    EmberApsFrame *apsFrame, \
+                    EmberStatus status, \
+                    uint16_t messageLength, \
+                    uint8_t *messageContents); \
+
+
+#define EMBER_AF_GENERATED_PLUGIN_MESSAGE_SENT_FUNCTION_CALLS \
+  emberAfPluginConcentratorMessageSentCallback(type, \
+                    indexOrDestination, \
+                    apsFrame, \
+                    status, \
+                    messageLength, \
+                    messageContents); \
 
 // Generated data for the command discovery
 #define GENERATED_COMMANDS { \

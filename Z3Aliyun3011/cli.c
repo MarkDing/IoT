@@ -37,6 +37,13 @@ void emberAfPluginAddressTableLookupCommand(void);
 void emberAfPluginAddressTablePrintCommand(void);
 void emberAfPluginAddressTableRemoveCommand(void);
 void emberAfPluginAddressTableSetCommand(void);
+void emberAfPluginConcentratorAggregationCommand(void);
+void emberAfPluginConcentratorPrintHostSourceRouteTable(void);
+void emberAfPluginConcentratorPrintSourceRouteTable(void);
+void emberAfPluginConcentratorSetRouterBehaviorCommand(void);
+void emberAfPluginConcentratorStartDiscovery(void);
+void emberAfPluginConcentratorStatus(void);
+void emberAfPluginConcentratorStopDiscovery(void);
 void emberAfPluginCounterPrintCounterTypeCommand(void);
 void emberAfPluginCountersClear(void);
 void emberAfPluginCountersPrintCommand(void);
@@ -1597,6 +1604,24 @@ static EmberCommandEntry emberCommandTablePluginCounterCommands[] = {
 };
 
 #if defined(EMBER_COMMAND_INTEPRETER_HAS_DESCRIPTION_FIELD)
+static const char * const emberCommandTablePluginConcentratorSetRouterBehaviorCommandArguments[] = {
+  "The value of a EMBER_AF_PLUGIN_CONCENTRATOR_ROUTER_BEHAVIOR_ enum memb ...",
+  NULL
+};
+#endif
+
+static EmberCommandEntry emberCommandTablePluginConcentratorCommands[] = {
+  emberCommandEntryActionWithDetails("agg", emberAfPluginConcentratorAggregationCommand, "", "(Requires Concentrator Support to be enabled on this devic ...", NULL),
+  emberCommandEntryActionWithDetails("print-host-table", emberAfPluginConcentratorPrintHostSourceRouteTable, "", "Print the host source route table.", NULL),
+  emberCommandEntryActionWithDetails("print-table", emberAfPluginConcentratorPrintSourceRouteTable, "", "Print the SOC/NCP source route table.", NULL),
+  emberCommandEntryActionWithDetails("set-router-behavior", emberAfPluginConcentratorSetRouterBehaviorCommand, "u", "This command allows the user to set the router behavior for this plugi ...", emberCommandTablePluginConcentratorSetRouterBehaviorCommandArguments),
+  emberCommandEntryActionWithDetails("start", emberAfPluginConcentratorStartDiscovery, "", "Starts the periodic broadcast of MTORRs", NULL),
+  emberCommandEntryActionWithDetails("status", emberAfPluginConcentratorStatus, "", "Prints current status and configured parameters of the concentrator", NULL),
+  emberCommandEntryActionWithDetails("stop", emberAfPluginConcentratorStopDiscovery, "", "Stops the periodic broadcast of MTORRs", NULL),
+  emberCommandEntryTerminator()
+};
+
+#if defined(EMBER_COMMAND_INTEPRETER_HAS_DESCRIPTION_FIELD)
 static const char * const emberCommandTablePluginAddressTableAddCommandArguments[] = {
   "Entry to be added.",
   NULL
@@ -1637,6 +1662,7 @@ static EmberCommandEntry emberCommandTablePluginAddressTableCommands[] = {
 
 static EmberCommandEntry emberCommandTablePluginCommands[] = {
   emberCommandEntrySubMenu("address-table", emberCommandTablePluginAddressTableCommands, ""),
+  emberCommandEntrySubMenu("concentrator", emberCommandTablePluginConcentratorCommands, ""),
   emberCommandEntrySubMenu("counter", emberCommandTablePluginCounterCommands, ""),
   emberCommandEntrySubMenu("counters", emberCommandTablePluginCountersCommands, ""),
   emberCommandEntrySubMenu("device-table", emberCommandTablePluginDeviceTableCommands, ""),
