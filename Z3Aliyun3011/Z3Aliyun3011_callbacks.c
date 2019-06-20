@@ -23,8 +23,8 @@ extern uint16_t emAfZclBufferLen;
 extern uint16_t *emAfResponseLengthPtr;
 extern EmberApsFrame *emAfCommandApsFrame;
 
-#define POLL_ATTR_INTERVAL 10000
-#define FRESH_DEV_INTERVAL 5000
+#define POLL_ATTR_INTERVAL 5000
+#define FRESH_DEV_INTERVAL 3000
 
 static uint8_t    g_app_task_can_run = 0;
 static uint8_t    g_button1_pressed = 0;
@@ -70,13 +70,11 @@ void emberAfPollAttrByDeviceTable()
         }
     }
 
-    #if  0
     if (offlinecnt > 0) {
-        g_poll_interval = 10000;
+        g_poll_interval = POLL_ATTR_INTERVAL;
     } else {
-        g_poll_interval = 20000;
+        g_poll_interval = 5*POLL_ATTR_INTERVAL;
     }
-    #endif /* #if 0 */
 
     
     attributeIdBuffer[0] = LOW_BYTE(g_polllist[g_current_poll_index].attrID);
@@ -115,20 +113,15 @@ void emberAfPollAttrByDeviceTable()
             continue;
         }
 
-        if (0xFF != emberChildIndex(deviceTable[i].nodeId)) {
-            deviceTable[i].online = 1;
-            deviceTable[i].keepalive_failcnt = 0;
-        } else {
-            deviceTable[i].keepalive_failcnt++;
-            if (deviceTable[i].keepalive_failcnt > 2 * (sizeof(g_polllist) / sizeof(PollItem_S))) {
-                
-                if (0 != deviceTable[i].online) {
-                    emberEventControlSetActive(addSubDevEventControl);    
-                }
-                
-                deviceTable[i].online = 0;
-                deviceTable[i].keepalive_failcnt = 0;
+        deviceTable[i].keepalive_failcnt++;
+        if (deviceTable[i].keepalive_failcnt > 6) {
+            
+            if (0 != deviceTable[i].online) {
+                emberEventControlSetActive(addSubDevEventControl);    
             }
+            
+            deviceTable[i].online = 0;
+            deviceTable[i].keepalive_failcnt = 0;
         }
     }
 }
@@ -209,7 +202,7 @@ void addSubDevEventHandler()
             }
         }
 
-        if (cloud_oper_cnt >= 4) {
+        if (cloud_oper_cnt >= 6) {
             break;
         }
     }
@@ -463,10 +456,10 @@ boolean emberAfReadAttributesResponseCallback(EmberAfClusterId clusterId, int8u 
             switch (deviceTable[index].deviceId)
             {
                 case DEMO_Z3DIMMERLIGHT:
-                    snprintf(properties, sizeof(properties), "{\"Brightness\":%d}", val * 100 / 255);
+                    snprintf(properties, sizeof(properties), "{\"Brightness\":%d}", (uint32_t)val * 100 / 255);
                     break;
                 case DEMO_Z3CURTAIN:
-                    snprintf(properties, sizeof(properties), "{\"CurtainPosition\":%d}", val * 100 / 255);
+                    snprintf(properties, sizeof(properties), "{\"CurtainPosition\":%d}", (uint32_t)val * 100 / 255);
                     break;
                 default:
                     break;

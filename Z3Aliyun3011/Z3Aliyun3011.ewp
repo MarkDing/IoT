@@ -201,7 +201,7 @@
           <state>__SOURCEFILE__="$FILE_FNAME$"</state>
           <state>HAL_CONFIG=1</state>
           <state>EMBER_AF_USE_HWCONF</state>
-          <state>EMBER_ROUTE_TABLE_SIZE=16</state>
+          <state>EMBER_ROUTE_TABLE_SIZE=32</state>
           <state>EMBER_AF_API_EMBER_TYPES="stack/include/ember-types.h"</state>
           <state>EMBER_AF_API_DEBUG_PRINT="app/framework/util/print.h"</state>
           <state>EMBER_AF_API_AF_HEADER="app/framework/include/af.h"</state>
@@ -584,7 +584,7 @@
           <state>ZA_GENERATED_HEADER="app/builder/Z3Aliyun3011/Z3Aliyun3011.h"</state>
           <state>HAL_CONFIG=1</state>
           <state>EMBER_AF_USE_HWCONF</state>
-          <state>EMBER_ROUTE_TABLE_SIZE=16</state>
+          <state>EMBER_ROUTE_TABLE_SIZE=32</state>
           <state>EMBER_AF_API_EMBER_TYPES="stack/include/ember-types.h"</state>
           <state>EMBER_AF_API_DEBUG_PRINT="app/framework/util/print.h"</state>
           <state>EMBER_AF_API_AF_HEADER="app/framework/include/af.h"</state>
