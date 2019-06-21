@@ -1006,7 +1006,7 @@ int32_t HAL_SSL_Destroy(uintptr_t handle)
     //printf("[%s][%d]trace\r\n", __func__, __LINE__);    
     if (0 != wifi_tcpip_disconnect((uint8_t)handle)) {
         printf("[%s][%d] disconnect fail\r\n", __func__, __LINE__);
-        return -1;
+        //return -1;
     }
 
     return 0;

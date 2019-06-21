@@ -89,7 +89,9 @@ static int aliyun_disconnected_event_handler(void)
     aliyun_ctx->cloud_connected = 0;
     halClearLed(BOARDLED0);
     
-    HAL_Reboot();
+    while (1) {
+        HAL_Reboot();
+    }
     return 0;
 }
 

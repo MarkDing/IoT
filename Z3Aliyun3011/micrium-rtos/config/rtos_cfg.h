@@ -89,11 +89,9 @@ extern void halInternalSysReset(unsigned short extendedCause);
 
 #define  RTOS_CFG_ASSERT_DBG_ARG_CHK_EXT_MASK                    (RTOS_CFG_MODULE_ALL)
 
-//#define  RTOS_CFG_RTOS_ASSERT_DBG_FAILED_END_CALL(ret_val)     while (1) {; }
-#define  RTOS_CFG_RTOS_ASSERT_DBG_FAILED_END_CALL(ret_val)       halInternalSysReset(0x0204)
+#define  RTOS_CFG_RTOS_ASSERT_DBG_FAILED_END_CALL(ret_val)     while (1) {; }
 
-//#define  RTOS_CFG_RTOS_ASSERT_CRITICAL_FAILED_END_CALL(ret_val)  CPU_SW_EXCEPTION(ret_val)
-#define  RTOS_CFG_RTOS_ASSERT_CRITICAL_FAILED_END_CALL(ret_val)  halInternalSysReset(0x0204)
+#define  RTOS_CFG_RTOS_ASSERT_CRITICAL_FAILED_END_CALL(ret_val)  CPU_SW_EXCEPTION(ret_val)
 
 /*
  *********************************************************************************************************

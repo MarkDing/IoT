@@ -327,16 +327,18 @@ void emberAfPluginMicriumRtosAppTask1MainLoopCallback(void *p_arg)
 
     if (wifi_is_ssid_valid())
     {
-        while (retry++ < 3) {
+        while (1/*retry++ < 3*/) {
             if (0 == wifi_connect_withsaveddata(3000)) {
                 wifi_connected = true;
                 break;
             }
         }
 
+        #if  0
         if (retry >= 3) {
             wifi_connected = false;
         }
+        #endif /* #if 0 */
     } else {
         wifi_connected = false;
     }
