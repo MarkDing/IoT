@@ -22,12 +22,6 @@ typedef struct {
 } platform_aes_t;
 #endif
 
-DLL_HAL_API int HAL_Aes128_Cfb_Decrypt(
-            _IN_ p_HAL_Aes128_t aes,
-            _IN_ const void *src,
-            _IN_ size_t length,
-            _OU_ void *dst);
-
 p_HAL_Aes128_t awss_Aes128_Init(
             const uint8_t *key,
             const uint8_t *iv)

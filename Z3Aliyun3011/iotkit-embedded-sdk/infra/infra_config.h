@@ -37,7 +37,6 @@
 #define LOG_REPORT_TO_CLOUD
 #define DEVICE_MODEL_ENABLED
 #define DEVICE_MODEL_GATEWAY
-//#define ALCS_ENABLED
 #define HAL_KV
 #define SUPPORT_TLS
 #define HAL_CRYPTO

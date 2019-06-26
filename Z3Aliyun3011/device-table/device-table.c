@@ -466,6 +466,7 @@ void emAfDeviceTableSave(void)
 
 #endif // defined(EZSP_HOST) && !defined(EMBER_TEST)
 
+    #if  0
     EmberAfPluginDeviceTableEntry *deviceTable = emberAfDeviceTablePointer();
     tokTypeDevTable data;
     uint8_t i;
@@ -484,6 +485,7 @@ void emAfDeviceTableSave(void)
             halCommonSetIndexedToken(TOKEN_DEV_TABLE, i, &data);
         }
     }
+    #endif /* #if 0 */
 }
 
 void emAfDeviceTableLoad(void)
@@ -536,6 +538,7 @@ void emAfDeviceTableLoad(void)
 
 #endif // #if defined(EZSP_HOST) && !defined(EMBER_TEST)
 
+    #if  0
     EmberAfPluginDeviceTableEntry *deviceTable = emberAfDeviceTablePointer();
     memset(deviceTable, 0xFF, sizeof(EmberAfPluginDeviceTableEntry) * EMBER_AF_PLUGIN_DEVICE_TABLE_DEVICE_TABLE_SIZE);
 
@@ -559,6 +562,7 @@ void emAfDeviceTableLoad(void)
             deviceTable[i].nodeId = EMBER_AF_PLUGIN_DEVICE_TABLE_NULL_NODE_ID;
         }
     }
+    #endif /* #if 0 */
 }
 
 // --------------------------------

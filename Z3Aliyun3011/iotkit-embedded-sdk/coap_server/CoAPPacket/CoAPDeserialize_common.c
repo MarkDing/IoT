@@ -23,9 +23,7 @@ int CoAPDeserialize_Header(CoAPMessage *msg, unsigned char *buf)
 
 int CoAPDeserialize_Token(CoAPMessage *msg, unsigned char *buf)
 {
-    if (msg->header.tokenlen > 0) {
-        memcpy(msg->token, buf, msg->header.tokenlen);
-    }
+    memcpy(msg->token, buf, msg->header.tokenlen);
     return msg->header.tokenlen;
 }
 
@@ -87,13 +85,6 @@ int CoAPDeserialize_Options(CoAPMessage *msg, unsigned char *buf, int buflen)
         ptr += len;
         index ++;
         count += len;
-
-        if (msg->optcount >= COAP_MSG_MAX_OPTION_NUM) {
-            if ((count < buflen) && (0xFF != *ptr)) {
-                //invalid;
-                return -1;
-            }
-        }
     }
 
     return (int)(ptr - buf);
@@ -139,10 +130,6 @@ int CoAPDeserialize_Message(CoAPMessage *msg, unsigned char *buf, int buflen)
     remlen -= count;
 
     count = CoAPDeserialize_Options(msg, ptr, remlen);
-    if (count < 0) {
-        return COAP_ERROR_INVALID_PARAM;
-    }
-    
     ptr += count;
     remlen -= count;
 

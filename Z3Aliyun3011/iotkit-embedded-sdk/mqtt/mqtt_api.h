@@ -355,7 +355,7 @@ int IOT_MQTT_Nwk_Event_Handler(void *handle, iotx_mqtt_nwk_event_t event, iotx_m
 #endif
 
 /* Default keepalive interval of MQTT request in second */
-#define CONFIG_MQTT_KEEPALIVE_INTERVAL          (30)
+#define CONFIG_MQTT_KEEPALIVE_INTERVAL          (60)
 
 
 /* Default offline subscribe list max length when PLATFORM_HAS_DYNMEM is not set */
