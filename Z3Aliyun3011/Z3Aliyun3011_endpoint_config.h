@@ -181,38 +181,38 @@ const EmberAfGenericClusterFunction emberAfFuncArrayIdentifyClusterServer[] = { 
 
 #define EMBER_AF_GENERATED_PLUGIN_INIT_FUNCTION_DECLARATIONS \
   void emberAfPluginDeviceTableInitCallback(void); \
+  void emberAfPluginConcentratorInitCallback(void); \
   void emberAfPluginIdleSleepInitCallback(void); \
   void emberAfPluginCountersInitCallback(void); \
-  void emberAfPluginConcentratorInitCallback(void); \
 
 
 #define EMBER_AF_GENERATED_PLUGIN_INIT_FUNCTION_CALLS \
   emberAfPluginDeviceTableInitCallback(); \
+  emberAfPluginConcentratorInitCallback(); \
   emberAfPluginIdleSleepInitCallback(); \
   emberAfPluginCountersInitCallback(); \
-  emberAfPluginConcentratorInitCallback(); \
 
 
 #define EMBER_AF_GENERATED_PLUGIN_NCP_INIT_FUNCTION_DECLARATIONS \
-  void emberAfPluginAddressTableNcpInitCallback(bool memoryAllocation); \
   void emberAfPluginConcentratorNcpInitCallback(bool memoryAllocation); \
+  void emberAfPluginAddressTableNcpInitCallback(bool memoryAllocation); \
 
 
 #define EMBER_AF_GENERATED_PLUGIN_NCP_INIT_FUNCTION_CALLS \
-  emberAfPluginAddressTableNcpInitCallback(memoryAllocation); \
   emberAfPluginConcentratorNcpInitCallback(memoryAllocation); \
+  emberAfPluginAddressTableNcpInitCallback(memoryAllocation); \
 
 
 #define EMBER_AF_GENERATED_PLUGIN_STACK_STATUS_FUNCTION_DECLARATIONS \
   void emberAfPluginDeviceTableStackStatusCallback(EmberStatus status); \
-  void emberAfPluginNetworkSteeringStackStatusCallback(EmberStatus status); \
   void emberAfPluginConcentratorStackStatusCallback(EmberStatus status); \
+  void emberAfPluginNetworkSteeringStackStatusCallback(EmberStatus status); \
 
 
 #define EMBER_AF_GENERATED_PLUGIN_STACK_STATUS_FUNCTION_CALLS \
   emberAfPluginDeviceTableStackStatusCallback(status); \
-  emberAfPluginNetworkSteeringStackStatusCallback(status); \
   emberAfPluginConcentratorStackStatusCallback(status); \
+  emberAfPluginNetworkSteeringStackStatusCallback(status); \
 
 
 #define EMBER_AF_GENERATED_PLUGIN_MESSAGE_SENT_FUNCTION_DECLARATIONS \

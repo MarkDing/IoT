@@ -26439,6 +26439,19 @@ void emberAfPluginIdentifyStopFeedbackCallback(uint8_t endpoint);
 /** @} END Identify Cluster Plugin Callbacks */
 
 
+/** @name Concentrator Support Plugin Callbacks */
+// @{
+
+/** @brief Broadcast Sent
+ *
+ * This function is called when a new MTORR broadcast has been successfully
+ * sent by the concentrator plugin.
+ *
+ */
+void emberAfPluginConcentratorBroadcastSentCallback(void);
+/** @} END Concentrator Support Plugin Callbacks */
+
+
 /** @name Update TC Link Key Plugin Callbacks */
 // @{
 
@@ -26674,19 +26687,6 @@ void emberAfPluginMicriumRtosAppTask3InitCallback(void);
  */
 void emberAfPluginMicriumRtosAppTask3MainLoopCallback(void *p_arg);
 /** @} END Micrium RTOS Plugin Callbacks */
-
-
-/** @name Concentrator Support Plugin Callbacks */
-// @{
-
-/** @brief Broadcast Sent
- *
- * This function is called when a new MTORR broadcast has been successfully
- * sent by the concentrator plugin.
- *
- */
-void emberAfPluginConcentratorBroadcastSentCallback(void);
-/** @} END Concentrator Support Plugin Callbacks */
 
 
 /** @} END addtogroup */

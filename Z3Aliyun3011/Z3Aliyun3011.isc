@@ -1,5 +1,5 @@
 #ISD App Configuration:
-# Simplicity Studio version: 5.8.0.201906041330-1201
+# Simplicity Studio version: 5.8.0.201906251623-1206
 #  Directory of framework within the stack, which helps in case there are more
 #  frameworks within a stack.
 FrameworkDirectory:protocol\zigbee\app\framework
@@ -1092,8 +1092,6 @@ AppPluginOption(efr32~family[M]~series[1]~device_configuration[2]~performance[P]
 
 AppPluginOption(efr32~family[M]~series[1]~device_configuration[2]~performance[P]~radio[433]~flash[1024K]~temp[G]~package[L]~pins[125]~!module+BRD4164A+iar):EMBER_AF_PLUGIN_MICRIUM_RTOS_APP_TASK1_STACK_SIZE,4096
 
-AppPluginOption(efr32~family[M]~series[1]~device_configuration[2]~performance[P]~radio[433]~flash[1024K]~temp[G]~package[L]~pins[125]~!module+BRD4164A+iar):EMBER_AF_PLUGIN_NVM3_CACHE_SIZE,254
-
 AppPluginOption(efr32~family[M]~series[1]~device_configuration[2]~performance[P]~radio[433]~flash[1024K]~temp[G]~package[L]~pins[125]~!module+BRD4164A+iar):EMBER_BINDING_TABLE_SIZE,32
 
 AppPluginOption(efr32~family[M]~series[1]~device_configuration[2]~performance[P]~radio[433]~flash[1024K]~temp[G]~package[L]~pins[125]~!module+BRD4164A+iar):EMBER_AF_PLUGIN_CONCENTRATOR_CONCENTRATOR_TYPE,HighRamConcentrator
@@ -1115,4 +1113,6 @@ AppPluginOption(efr32~family[M]~series[1]~device_configuration[2]~performance[P]
 AppPluginOption(efr32~family[M]~series[1]~device_configuration[2]~performance[P]~radio[433]~flash[1024K]~temp[G]~package[L]~pins[125]~!module+BRD4164A+iar):EMBER_SOURCE_ROUTE_TABLE_SIZE,32
 
 AppPluginOption(efr32~family[M]~series[1]~device_configuration[2]~performance[P]~radio[433]~flash[1024K]~temp[G]~package[L]~pins[125]~!module+BRD4164A+iar):EMBER_MAX_END_DEVICE_CHILDREN,16
+
+AppPluginOption(efr32~family[M]~series[1]~device_configuration[2]~performance[P]~radio[433]~flash[1024K]~temp[G]~package[L]~pins[125]~!module+BRD4164A+iar):EMBER_AF_PLUGIN_NVM3_CACHE_SIZE,512
 

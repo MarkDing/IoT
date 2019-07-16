@@ -363,6 +363,10 @@ void aliyun_post_property(int devid, char *property_payload)
         return;
     }
 
+    if (!aliyun_is_cloud_connected()) {
+        return;
+    }
+
     res = IOT_Linkkit_Report(devid, ITM_MSG_POST_PROPERTY,
                              (unsigned char *)property_payload, strlen(property_payload));
     //ALIYUN_TRACE("Post Property Message ID: %d", res);
@@ -563,7 +567,7 @@ int aliyun_del_subdev(int devid)
     }
 
     (void)IOT_Linkkit_Report(devid, ITM_MSG_LOGOUT, NULL, 0);   
-    (void)IOT_Linkkit_Report(devid, ITM_MSG_DELETE_TOPO, NULL, 0);
+    //(void)IOT_Linkkit_Report(devid, ITM_MSG_DELETE_TOPO, NULL, 0);
     
     ALIYUN_TRACE("subdev logout success: devid = %d\n", devid);
     return 0;    

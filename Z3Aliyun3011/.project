@@ -169,11 +169,6 @@
 			<locationURI>STUDIO_SDK_LOC/protocol/zigbee/app/framework/cli/security-cli.c</locationURI>
 		</link>
 		<link>
-			<name>service-discovery-common.c</name>
-			<type>1</type>
-			<locationURI>STUDIO_SDK_LOC/protocol/zigbee/app/framework/util/service-discovery-common.c</locationURI>
-		</link>
-		<link>
 			<name>service-discovery-soc.c</name>
 			<type>1</type>
 			<locationURI>STUDIO_SDK_LOC/protocol/zigbee/app/framework/util/service-discovery-soc.c</locationURI>
@@ -262,11 +257,6 @@
 			<name>counters/counters-soc.c</name>
 			<type>1</type>
 			<locationURI>STUDIO_SDK_LOC/protocol/zigbee/app/framework/plugin/counters/counters-soc.c</locationURI>
-		</link>
-		<link>
-			<name>efr32/assert-crash-handlers.c</name>
-			<type>1</type>
-			<locationURI>STUDIO_SDK_LOC/platform/base/hal/micro/cortexm3/efm32/assert-crash-handlers.c</locationURI>
 		</link>
 		<link>
 			<name>efr32/button.c</name>

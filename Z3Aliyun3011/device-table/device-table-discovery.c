@@ -647,8 +647,33 @@ bool emAfPluginDeviceTablePreZDOMessageReceived(EmberNodeId emberNodeId,
                                                 uint16_t length)
 {
   EmberNodeId ieeeSourceNode;
+  EmberNodeId actualNodeId;
+  uint8_t     status;
 
-  emberAfCorePrintln("%2x:  ", emberNodeId);
+  //emberAfCorePrintln("%2x:  ", emberNodeId);
+
+  if (ACTIVE_ENDPOINTS_RESPONSE == apsFrame->clusterId ||
+      SIMPLE_DESCRIPTOR_RESPONSE == apsFrame->clusterId ||
+      NETWORK_ADDRESS_RESPONSE == apsFrame->clusterId ||
+      IEEE_ADDRESS_RESPONSE == apsFrame->clusterId) {
+      status = message[1];
+      emberAfCorePrintln("status=%X", status);
+      if (0 != status) {
+          return false;
+      }
+
+      if (ACTIVE_ENDPOINTS_RESPONSE == apsFrame->clusterId ||
+          SIMPLE_DESCRIPTOR_RESPONSE == apsFrame->clusterId) {
+          actualNodeId = emberFetchLowHighInt16u(message + 2);
+      } else if (NETWORK_ADDRESS_RESPONSE == apsFrame->clusterId ||
+          IEEE_ADDRESS_RESPONSE == apsFrame->clusterId) {
+          actualNodeId = emberFetchLowHighInt16u(message + 10);
+      }
+
+      emberAfCorePrintln("actualNodeId=%2X", actualNodeId);
+      emberNodeId = actualNodeId;
+  }
+
   switch (apsFrame->clusterId) {
     case ACTIVE_ENDPOINTS_RESPONSE:
       emberAfCorePrintln("Active Endpoints Response");

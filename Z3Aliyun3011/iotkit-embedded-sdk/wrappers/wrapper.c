@@ -80,7 +80,7 @@ void *HAL_Malloc(uint32_t size)
     *(uint8_t *)(pdata + 2) = '#';
     *(uint8_t *)(pdata + 3) = '!';
     *(uint32_t *)(pdata + 4) = size;
-    g_heap_used += size;
+    g_heap_used += size + 4;
     //printf("\033[31m[%s][%d]heap used 0x%x bytes\r\n", __func__, __LINE__, g_heap_used);
     //printf("\33[37m");
     return pdata + 8;
@@ -111,7 +111,7 @@ void HAL_Free(void *ptr)
         return;
     }
 
-    g_heap_used -= *(uint32_t *)(pdata - 4);
+    g_heap_used -= *(uint32_t *)(pdata - 4) + 4;
     //printf("\033[31m[%s][%d]heap used 0x%x bytes\r\n", __func__, __LINE__, g_heap_used);
     //printf("\33[37m");
     free(pdata - 8);

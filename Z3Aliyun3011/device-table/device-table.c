@@ -658,6 +658,8 @@ static void emberAfDeviceTableSendMsgCallback(EmberOutgoingMessageType type,
     }
     
     if (status != EMBER_SUCCESS) {
+        HAL_SleepMs(1);
+        
         EmberMessageBuffer payload = emberFillLinkedBuffers(message, msgLen);
         if (payload == EMBER_NULL_MESSAGE_BUFFER) {
             return;
